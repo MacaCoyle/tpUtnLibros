@@ -1,0 +1,16 @@
+{
+  "name": "grupof",
+  "version": "1.0.0",
+  "description": "Proyecto integrador del modulo 3 y 4, NodeJs",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
