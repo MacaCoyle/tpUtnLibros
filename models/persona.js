@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const mongooseUniqueValidator = require('mongoose-unique-validator')
 const Schema = mongoose.Schema
 
 /* 
@@ -9,10 +10,12 @@ Para asegurar los aciertos de las busquedas, se sugiere el guardado en mayuscula
 */
 
 const personaSchema = new Schema({
-    nombre: String,
-    apellido: String,
-    email: String,
-    alias: String
+    nombre: {type: String, required: true},
+    apellido: {type: String, required: true},
+    email: {type: String, unique: true, required: true}, //Tiene que ser unico 
+    alias: {type: String, required: true}
 })
 
-module.exports = mongoose.model('Categoria', personaSchema)
+personaSchema.plugin(mongooseUniqueValidator)
+
+module.exports = mongoose.model('Persona', personaSchema)

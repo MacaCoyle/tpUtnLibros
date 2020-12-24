@@ -8,10 +8,11 @@ Para asegurar los aciertos de las busquedas, se sugiere el guardado en mayuscula
 */
 
 const libroSchema = new Schema({
-    nombre: String,
-    descripcion: String,
-    //Persona a la cual se le presto
-    //Categoria a la que pertenece
+    nombre: {type: String, required: true},
+    descripcion: {type: String, required: true},
+    categoria : {type: Schema.ObjectId, ref: 'Categoria', required: true },
+    tenedor: {type: Schema.ObjectId, ref: 'Persona'}
 })
 
-module.exports = mongoose.model('libro', libroSchema)
+
+module.exports = mongoose.model('Libro', libroSchema)
