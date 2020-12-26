@@ -8,7 +8,7 @@ const app = express()
 const port = process.env.PORT ? process.env.PORT : 3000
 
 
-var mongoDB = 'mongodb://localhost/mybook'
+var mongoDB = 'mongodb://localhost/whereismybook'
 mongoose.connect(mongoDB, {useNewUrlParser: true})
 mongoose.Promise = global.Promise
 var db = mongoose.connection

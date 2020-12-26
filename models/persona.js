@@ -12,9 +12,21 @@ Para asegurar los aciertos de las busquedas, se sugiere el guardado en mayuscula
 const personaSchema = new Schema({
     nombre: {type: String, required: true},
     apellido: {type: String, required: true},
-    email: {type: String, unique: true, required: true}, //Tiene que ser unico 
+    email: {type: String, unique: true, required: true, uniqueCaseInsensitive: true}, 
     alias: {type: String, required: true}
 })
+
+personaSchema.methods.toString = function(){
+    return `Nombre: ${this.nombre} Apellido: ${this.apellido} Email: ${this.email} Alias: ${this.alias}`
+}
+
+personaSchema.statics.allPersonas = function(cb){
+    return this.find({}, cb)
+}
+
+personaSchema.statics.add = function(aPersona, cb){
+    this.create(aPersona, cb)
+}
 
 personaSchema.plugin(mongooseUniqueValidator)
 

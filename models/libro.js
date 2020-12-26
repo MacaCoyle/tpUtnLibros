@@ -14,5 +14,16 @@ const libroSchema = new Schema({
     tenedor: {type: Schema.ObjectId, ref: 'Persona'}
 })
 
+libroSchema.methods.toString = function(){
+    return `Libro: ${this.nombre} Descripcion: ${this.descripcion} Categoria: ${this.categoria} Quien lo tiene: ${this.tenedor}`
+}
+
+libroSchema.statics.allLibros = function(cb){
+    return this.find({}, cb)
+}
+
+libroSchema.statics.add = function(aLibro, cb){
+    this.create(aLibro, cb)
+}
 
 module.exports = mongoose.model('Libro', libroSchema)

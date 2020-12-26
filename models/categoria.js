@@ -11,6 +11,18 @@ const categoriaSchema = new Schema({
     nombre: {type: String, unique:true, required: true, uniqueCaseInsensitive: true}
 })
 
+categoriaSchema.methods.toString = function(){
+    return 'Categoria: ' + this.nombre
+}
+
+categoriaSchema.statics.allCategorias = function(cb){
+    return this.find({}, cb)
+}
+
+categoriaSchema.statics.add = function(aCategoria, cb){
+    this.create(aCategoria, cb)
+}
+
 categoriaSchema.plugin(mongooseUniqueValidator)
 
 module.exports = mongoose.model('Categoria', categoriaSchema)
