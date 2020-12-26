@@ -1,7 +1,6 @@
 const { urlencoded } = require('body-parser')
 const express = require('express')
 const mongoose = require('mongoose')
-const mongoose = require('mongoose')
 
 const app = express()
 
@@ -14,6 +13,10 @@ mongoose.Promise = global.Promise
 var db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error: '))
 
+//Prueba de servidor.
+app.get('/', (req, res) => {
+    res.send('Estas vivo en el: ' + port)
+})
 
 app.use(urlencoded())
 app.use(express.json());
