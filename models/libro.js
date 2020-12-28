@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 const Schema = mongoose.Schema
 
 /* De los libros, el nombre, una descripcion, su categoria y la persona a la cual se le ha prestado el libro. Para representar que un libro se encuentra en la biblioteca se puede utilizar cualquiera de las siguientes estrategias: null para libros en la biblioteca en el campo de persona_id, que el usuario se encuentre ingresado como una persona mas. 
@@ -25,5 +26,12 @@ libroSchema.statics.allLibros = function(cb){
 libroSchema.statics.add = function(aLibro, cb){
     this.create(aLibro, cb)
 }
+
+libroSchema.methods.updateTenedor = function(nuevoTenedor){
+    this.tenedor = nuevoTenedor
+}
+
+//Plugins para validar elementos unicos y de autoincremento
+categoriaSchema.plugin(AutoIncrement, {inc_field: 'id'})
 
 module.exports = mongoose.model('Libro', libroSchema)

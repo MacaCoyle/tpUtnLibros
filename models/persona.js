@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const mongooseUniqueValidator = require('mongoose-unique-validator')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
+
 const Schema = mongoose.Schema
 
 /* 
@@ -28,6 +30,9 @@ personaSchema.statics.add = function(aPersona, cb){
     this.create(aPersona, cb)
 }
 
+
+//Plugins para validar elementos unicos y de autoincremento
 personaSchema.plugin(mongooseUniqueValidator)
+categoriaSchema.plugin(AutoIncrement, {inc_field: 'id'})
 
 module.exports = mongoose.model('Persona', personaSchema)

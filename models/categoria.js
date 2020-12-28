@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const mongooseUniqueValidator = require('mongoose-unique-validator')
+const AutoIncrement = require('mongoose-sequence')(mongoose)
 const Schema = mongoose.Schema
 
 /* De los generos de los libros, solo los nombres, el campo nunca puede ser vacio o nulo y no pueden repetirse las categorias.
@@ -23,6 +24,10 @@ categoriaSchema.statics.add = function(aCategoria, cb){
     this.create(aCategoria, cb)
 }
 
+
+
+//Plugins para validar elementos unicos y de autoincremento
 categoriaSchema.plugin(mongooseUniqueValidator)
+categoriaSchema.plugin(AutoIncrement, {inc_field: 'id'})
 
 module.exports = mongoose.model('Categoria', categoriaSchema)
