@@ -1,73 +1,105 @@
-var app = require('express').Router();
-var PersonaModel = require('../models/personaModel');
+const PersonaModel = require('../models/personaModel');
 
 
-/**
- * API de Persona
- *  GET /api/persona -> listado de todos las personas
- *  GET /api/persona/:id -> Obtener la persona cuyo ID es pasado como parametro
- *  POST /api/persona -> Agregar una persona
- *  PUT /api/persona/:id -> Actualizar los datos de la persona cuyo ID es pasado como parametro
- *  DELETE /api/persona/:id -> Borrar la persona cuyo ID es pasado como parametro
- * 
- */
+ // Listado de personas
+exports.getAll = async (req, res) => {
+    try {
+        const listado = await PersonaModel.find();
 
+        //Comprueba si el array está vacio (si no existen la personas => error)
+        if (listado.length == 0) {
+            throw new Error("No se encuentran personas registradas");
+        }
 
-// Listado de personas
-app.get('/', function (req, res, next) {
-        PersonaModel.find({}, (err, listado) => {
-            if (err) {
-                next(new Error('No se pudieron obtener las personas'));
-                return;
-            }
-            res.send(listado);
-        });
-    });
+        // OK => enviar respuesta
+        console.log("Hay personas en la base de datos");
+        res.status(200).send(listado);
+        }
+    catch(e){
+        console.error(e.message);
+        res.status(413).send({});
+    }
+};
+
 
 // Obtener una persona
-app.get('/:id', function (req, res, next) {
-        var idPersona = req.params.id;
-        PersonaModel.findById(idPersona, (err, persona) => {
-            if (err) {
-                next(new Error('No se encontro la persona'));
-            }
-            res.send(persona);
-        });
-    });
+exports.getById = async (req, res) => {
+    try {
+        const idPersona = req.params.id;
+        const persona = await PersonaModel.find({ id: idPersona });
+
+        //Comprueba si el array está vacio (si no existe la persona => error)
+        if (persona.length == 0) {
+            throw new Error("No se encuentra la persona solicitada");
+        }
+
+        // OK => enviar respuesta
+        console.log("Persona encontrada");
+        res.status(200).send(persona);
+        }
+    catch(e){
+        console.error(e.message);
+        res.status(413).send({});
+    }
+};
+
 
 // Agregar una persona
-app.post('/', function (req, res, next) {
-        var nombre = req.body.nombre;
-        var instancia = new PersonaModel({ nombre: nombre });
-        instancia.save((err, persona) => {
-            if (err) {
-                next(new Error('No se pudo guardar la persona'));
-            }
-            res.status(200).send(persona);
-        });
-    });
+exports.create = async (req, res) => {
+    try {
+        //Chequeamos que nos envien toda la info
+        if (!req.body.nombre || !req.body.apellido || !req.body.alias || !req.body.email ) {
+            throw new Error('Faltan datos!');
+        }
+
+        //OK. Agarramos los datos enviados y los pasamos a Mayusculas
+        const nombre = req.body.nombre.toUpperCase();
+        const apellido = req.body.apellido.toUpperCase();
+        const alias = req.body.alias.toUpperCase();
+        const email = req.body.email.toUpperCase();
+
+        //Verificamos que no exista la misma persona (email)
+        let respuesta = await PersonaModel.find({ email: email});
+        if (respuesta.length > 0) {
+            throw new Error("Esa persona ya existe");
+        }
+
+        //OK-> Agregamos persona a la BD
+        const instancia = PersonaModel({ nombre: nombre, apellido: apellido, alias: alias, email: email });
+        respuesta = await instancia.save();
+        console.log(respuesta);
+        res.status(200).send(respuesta);
+
+    }
+    catch(e) {
+        console.error(e.message);
+        res.status(413).send({"Error": e.message});
+    }
+};
 
 // Actualizar una persona
-app.put('/:id', function (req, res, next) {
-        var idPersona = req.params.id;
-        var nombreNuevo = req.body.nombre;
-        PersonaModel.findByIdAndUpdate(idPersona, { nombre: nombreNuevo }, (err, persona) => {
-            if (err) {
-                next(new Error('No se pudo actualizar la persona'));
-            }
-            res.send(persona);
-        });
-    });
+exports.update = async (req, res) => {
+    try {
+        /**
+         * lógica y consultas BD para UDPATES
+         */
+        }
+    catch(e){
+        console.error(e.message);
+        res.status(413).send({});
+    }
+};
 
-// Borrar una persona
-app.delete('/:id', function (req, res, next) {
-        var idPersonaABorrar = req.params.id;
-        PersonaModel.findByIdAndRemove(idPersonaABorrar, (err, persona) => {
-            if (err) {
-                next(new Error('No se pudo borrar el artista'));
-            }
-            res.status(204).send(); // Codigo HTTP 204 Sin contenido (no hay nada que responder, pero la operacion fue exitosa)
-        });
-    });
 
-module.exports = app;
+// Eliminar una persona
+exports.delete = async (req, res) => {
+    try {
+        /**
+         * lógica y consultas BD para DELETE
+         */
+        }
+    catch(e){
+        console.error(e.message);
+        res.status(413).send({});
+    }
+};

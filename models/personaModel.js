@@ -14,13 +14,14 @@ Para asegurar los aciertos de las busquedas, se sugiere el guardado en mayuscula
 const personaSchema = new Schema({
   nombre: { type: String, required: true },
   apellido: { type: String, required: true },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    uniqueCaseInsensitive: true,
-  },
   alias: { type: String, required: true },
+  email: { type: String, required: true}
+  // email: {
+  //   type: String,
+  //   unique: true,
+  //   required: true,
+  //   uniqueCaseInsensitive: true,
+  // }
 });
 
 /*
