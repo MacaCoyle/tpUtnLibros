@@ -24,6 +24,13 @@ categoriaSchema.statics.add = function(aCategoria, cb){
     this.create(aCategoria, cb)
 }
 
+categoriaSchema.statics.delete = function(id, cb){
+    //Borra el esquema
+}
+
+categoriaSchema.methods.update = function(id, cb){
+    //Actualiza el esquema
+}
 
 
 //Plugins para validar elementos unicos y de autoincremento
