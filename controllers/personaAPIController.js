@@ -83,6 +83,38 @@ exports.update = async (req, res) => {
         /**
          * lógica y consultas BD para UDPATES
          */
+
+        //Verificamos que sí exista la persona (id)
+        const idPersona = req.params.id;
+        const respuesta = await PersonaModel.find({ id: idPersona });
+
+        if (respuesta.length == 0) {
+            throw new Error("La persona que querés modificar no existe");
+        }
+        
+        //OK => Chequeamos que nos envien toda la info
+        if (!req.body.nombre || !req.body.apellido || !req.body.alias || !req.body.email ) {
+            throw new Error('Faltan datos!');
+        }
+
+        //OK. Agarramos los datos enviados y los pasamos a Mayusculas
+        const nombre = req.body.nombre.toUpperCase();
+        const apellido = req.body.apellido.toUpperCase();
+        const alias = req.body.alias.toUpperCase();
+        const email = req.body.email.toUpperCase();
+
+        //Verificamos que el email sea el mismo
+        if (email != respuesta.map(respuesta => respuesta.email)) { // Map: ya que respuesta es un array
+            throw new Error("El email no puede ser modificado");
+        }
+
+        //OK => actualizamos BD
+        await PersonaModel.findOneAndUpdate({ id: idPersona, nombre: nombre, apellido: apellido, alias: alias});
+
+        //Traemos nuevamente a la persona ahora actualizada y la enviamos
+        let personaActualizada = await PersonaModel.find({ id: idPersona });
+        console.log(personaActualizada);
+        res.status(200).send(personaActualizada);
         }
     catch(e){
         console.error(e.message);

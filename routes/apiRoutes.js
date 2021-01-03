@@ -14,7 +14,7 @@ const personaAPIController = require("../controllers/personaAPIController");
 router.get("/persona", personaAPIController.getAll);
 router.get("/persona/:id", personaAPIController.getById);
 router.post("/persona", personaAPIController.create);
-router.put("/persona", personaAPIController.update);
+router.put("/persona/:id", personaAPIController.update);
 router.delete("/persona", personaAPIController.delete);
 
 
