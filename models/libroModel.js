@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongooseUniqueValidator = require("mongoose-unique-validator");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 const mongooseUniqueValidator = require("mongoose-unique-validator")
 const Schema = mongoose.Schema;
@@ -15,6 +16,7 @@ const libroSchema = new Schema({
   categoria_id: { type: Schema.ObjectId, ref: "Categoria", required: true },
   persona_id: { type: Schema.ObjectId, ref: "Persona" },
 });
+
 
 //Plugins para validar elementos unicos y de autoincremento
 libroSchema.plugin(mongooseUniqueValidator);
