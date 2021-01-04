@@ -9,12 +9,7 @@ Se solicita verificar que el usuario no envie los campos requeridos solo con esp
 Para asegurar los aciertos de las busquedas, se sugiere el guardado en mayusculas de todos los campos alfanumericos y recordar hacer las verificaciones teniendo en cuenta esto.*/
 
 const categoriaSchema = new Schema({
-  nombre: {
-    type: String,
-    unique: true,
-    required: true,
-    uniqueCaseInsensitive: true,
-  },
+  nombre: { type: String,unique: true, required: true, uniqueCaseInsensitive: true }
 });
 
 //Plugins para validar elementos unicos y de autoincremento
