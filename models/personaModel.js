@@ -24,19 +24,6 @@ const personaSchema = new Schema({
   // }
 });
 
-/*
-personaSchema.methods.toString = function () {
-  return `Nombre: ${this.nombre} Apellido: ${this.apellido} Email: ${this.email} Alias: ${this.alias}`;
-};
-
-personaSchema.statics.allPersonas = function (cb) {
-  return this.find({}, cb);
-};
-
-personaSchema.statics.add = function (aPersona, cb) {
-  this.create(aPersona, cb);
-};
-*/
 
 //Plugins para validar elementos unicos y de autoincremento
 personaSchema.plugin(mongooseUniqueValidator);
