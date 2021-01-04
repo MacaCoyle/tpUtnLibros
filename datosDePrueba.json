@@ -1,0 +1,50 @@
+//// CATEGORIA ////
+
+
+//// PERSONA ////
+
+{
+    "nombre": "jose",
+    "apellido": "juarez",
+    "alias": "jj",
+    "email": "pepe@host.com"
+}
+
+{
+    "nombre": "martin",
+    "apellido": "soria",
+    "alias": "el tincho",
+    "email": "tinchoso@host.com"
+}
+
+{
+    "nombre": "monica",
+    "apellido": "argento",
+    "alias": "la moni",
+    "email": "moniarg@host.com"
+}
+
+{
+    "nombre": "mengano",
+    "apellido": "suarez",
+    "alias": "menganito",
+    "email": "mengui@host.com"
+}
+
+{
+    "nombre": "fulano",
+    "apellido": "ortiz",
+    "alias": "fulanito",
+    "email": "falifru@host.com"
+}
+
+{
+    "nombre": "juana",
+    "apellido": "de arco",
+    "alias": "juanita la loca",
+    "email": "juana22@host.com"
+}
+
+
+
+//// LIBRO ////
