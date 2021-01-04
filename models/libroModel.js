@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongooseUniqueValidator = require("mongoose-unique-validator");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 const Schema = mongoose.Schema;
 
@@ -11,10 +12,15 @@ Para asegurar los aciertos de las busquedas, se sugiere el guardado en mayuscula
 const libroSchema = new Schema({
   nombre: { type: String, required: true },
   descripcion: { type: String, required: true },
+  /*
   categoria: { type: Schema.ObjectId, ref: "Categoria", required: true },
   tenedor: { type: Schema.ObjectId, ref: "Persona" },
+  */
+ categoria_id: { type: Number, required: true },
+ persona_id: { type: Number, required: true }
 });
 
+/*
 libroSchema.methods.toString = function () {
   return `Libro: ${this.nombre} Descripcion: ${this.descripcion} Categoria: ${this.categoria} Quien lo tiene: ${this.tenedor}`;
 };
@@ -30,6 +36,7 @@ libroSchema.statics.add = function (aLibro, cb) {
 libroSchema.methods.updateTenedor = function (nuevoTenedor) {
   this.tenedor = nuevoTenedor;
 };
+*/
 
 //Plugins para validar elementos unicos y de autoincremento
 libroSchema.plugin(mongooseUniqueValidator);

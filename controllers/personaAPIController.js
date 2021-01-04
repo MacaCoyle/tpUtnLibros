@@ -1,5 +1,9 @@
 const PersonaModel = require('../models/personaModel');
 
+/************************************************************************************************/
+// COMENTAR ESTO SI DA ERROR AL INICIAR LA APP
+const LibroModel = require('../models/libroModel');
+/************************************************************************************************/
 
  // Listado de personas
 exports.getAll = async (req, res) => {
@@ -8,11 +12,11 @@ exports.getAll = async (req, res) => {
 
         //Comprueba si el array está vacio (si no existen la personas => error)
         if (listado.length == 0) {
-            throw new Error("No se encuentran personas registradas");
+            throw new Error("No se encuentran personas registradas.");
         }
 
         // OK => enviar respuesta
-        console.log("Hay personas en la base de datos");
+        console.log("Hay personas en la base de datos.");
         res.status(200).send(listado);
         }
     catch(e){
@@ -30,11 +34,11 @@ exports.getById = async (req, res) => {
 
         //Comprueba si el array está vacio (si no existe la persona => error)
         if (persona.length == 0) {
-            throw new Error("No se encuentra la persona solicitada");
+            throw new Error("No se encuentra la persona solicitada.");
         }
 
         // OK => enviar respuesta
-        console.log("Persona encontrada");
+        console.log("Persona encontrada.");
         res.status(200).send(persona);
         }
     catch(e){
@@ -52,16 +56,21 @@ exports.create = async (req, res) => {
             throw new Error('Faltan datos!');
         }
 
-        //OK. Agarramos los datos enviados y los pasamos a Mayusculas
+        //OK-> Agarramos los datos enviados y los pasamos a Mayusculas
         const nombre = req.body.nombre.toUpperCase();
         const apellido = req.body.apellido.toUpperCase();
         const alias = req.body.alias.toUpperCase();
         const email = req.body.email.toUpperCase();
 
-        //Verificamos que no exista la misma persona (email)
+        //Chequeamos que no nos envíen espacios en blanco
+        if (nombre.trim().length == 0 || apellido.trim().length == 0 || alias.trim().length == 0 || email.trim().length == 0) {
+            throw new Error("No se pueden enviar datos sólo con espacios.");
+        }
+
+        //OK-> Verificamos que no exista la misma persona (email)
         let respuesta = await PersonaModel.find({ email: email});
         if (respuesta.length > 0) {
-            throw new Error("Esa persona ya existe");
+            throw new Error("Esa persona ya existe.");
         }
 
         //OK-> Agregamos persona a la BD
@@ -73,43 +82,46 @@ exports.create = async (req, res) => {
     }
     catch(e) {
         console.error(e.message);
-        res.status(413).send({"Error": e.message});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
 // Actualizar una persona
 exports.update = async (req, res) => {
     try {
-        /**
-         * lógica y consultas BD para UDPATES
-         */
-
         //Verificamos que sí exista la persona (id)
         const idPersona = req.params.id;
         const respuesta = await PersonaModel.find({ id: idPersona });
 
         if (respuesta.length == 0) {
-            throw new Error("La persona que querés modificar no existe");
+            throw new Error("La persona que querés modificar no existe.");
         }
         
-        //OK => Chequeamos que nos envien toda la info
+        //OK-> Chequeamos que nos envien toda la info
         if (!req.body.nombre || !req.body.apellido || !req.body.alias || !req.body.email ) {
             throw new Error('Faltan datos!');
         }
 
-        //OK. Agarramos los datos enviados y los pasamos a Mayusculas
+        //OK-> Agarramos los datos enviados y los pasamos a Mayusculas
         const nombre = req.body.nombre.toUpperCase();
         const apellido = req.body.apellido.toUpperCase();
         const alias = req.body.alias.toUpperCase();
         const email = req.body.email.toUpperCase();
 
-        //Verificamos que el email sea el mismo
+        //Chequeamos que no nos envíen espacios en blanco
+        if (nombre.trim().length == 0 || apellido.trim().length == 0 || alias.trim().length == 0 || email.trim().length == 0) {
+            throw new Error("No se pueden enviar datos sólo con espacios.");
+        }
+
+        //Verificamos que el email sea el mismo registrado en la BD
         if (email != respuesta.map(respuesta => respuesta.email)) { // Map: ya que respuesta es un array
-            throw new Error("El email no puede ser modificado");
+            throw new Error("El email no puede ser modificado.");
         }
 
         //OK => actualizamos BD
-        await PersonaModel.findOneAndUpdate({ id: idPersona, nombre: nombre, apellido: apellido, alias: alias});
+        const filtro = { id: idPersona };
+        const cambios = { nombre: nombre, apellido: apellido, alias: alias };
+        await PersonaModel.findOneAndUpdate(filtro, cambios);
 
         //Traemos nuevamente a la persona ahora actualizada y la enviamos
         let personaActualizada = await PersonaModel.find({ id: idPersona });
@@ -118,7 +130,7 @@ exports.update = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
@@ -126,12 +138,35 @@ exports.update = async (req, res) => {
 // Eliminar una persona
 exports.delete = async (req, res) => {
     try {
-        /**
-         * lógica y consultas BD para DELETE
-         */
+        const idPersona = req.params.id;
+        const persona = await PersonaModel.find({ id: idPersona });
+
+        // Comprueba si el array está vacio (si no existe la persona => error)
+        if (persona.length == 0) {
+            throw new Error("No se encuentra la persona solicitada.");
+        }
+
+        // Comprobamos si hay libros asociados a la persona
+
+        /************************************************************************************************/
+        // COMENTAR ESTO SI DA ERROR AL INICIAR LA APP
+        
+        const librosAsociados = await LibroModel.find({ persona_id: idPersona });
+        if (librosAsociados.length > 0) {
+            throw new Error("La persona tiene libros asociados. No se puede eliminar.");
+        }
+        
+        /************************************************************************************************/
+
+        // OK => eliminar de la BD
+        const filtro = { id: idPersona };
+        const respuesta = await PersonaModel.remove(filtro);
+
+        console.log(respuesta);
+        res.status(200).send({"Mensaje": "La persona se borró correctamente."});
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };

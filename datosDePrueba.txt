@@ -1,4 +1,26 @@
+/**********************************/
+
+// NOTA //
+// los "id" no están acá, ya que los agrega automaticamente
+// la base de datos, de forma autoincremental (definido en los models)
+
+/**********************************/
 //// CATEGORIA ////
+{
+    "nombre": "fantasia"
+}
+
+{
+    "nombre": "ciencia ficcion"
+}
+
+{
+    "nombre": "suspenso
+}
+
+{
+    "nombre": "autoayuda"
+}
 
 
 //// PERSONA ////
@@ -45,6 +67,19 @@
     "email": "juana22@host.com"
 }
 
+{
+    "nombre": "maria vistoria",
+    "apellido": "seleme",
+    "alias": "mari",
+    "email": "mari@HOST.COM"
+}
+
 
 
 //// LIBRO ////
+{
+    "nombre": "el Hobbit",
+    "descripcion": "Las aventuras de Bilbo y sus amiguis",
+    "categoria_id": "1",
+    "persona_id": "6"
+}
