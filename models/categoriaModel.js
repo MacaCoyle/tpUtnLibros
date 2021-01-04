@@ -9,29 +9,12 @@ Se solicita verificar que el usuario no envie los campos requeridos solo con esp
 Para asegurar los aciertos de las busquedas, se sugiere el guardado en mayusculas de todos los campos alfanumericos y recordar hacer las verificaciones teniendo en cuenta esto.*/
 
 const categoriaSchema = new Schema({
-  nombre: {
-    type: String,
-    unique: true,
-    required: true,
-    uniqueCaseInsensitive: true,
-  },
+  nombre: { type: String,unique: true, required: true, uniqueCaseInsensitive: true }
 });
-
-categoriaSchema.methods.toString = function () {
-  return "Categoria: " + this.nombre;
-};
-
-categoriaSchema.statics.allCategorias = function (cb) {
-  return this.find({}, cb);
-};
-
-categoriaSchema.statics.add = function (aCategoria, cb) {
-  this.create(aCategoria, cb);
-};
 
 //Plugins para validar elementos unicos y de autoincremento
 categoriaSchema.plugin(mongooseUniqueValidator);
-categoriaSchema.plugin(AutoIncrement, { inc_field: "id" });
+categoriaSchema.plugin(AutoIncrement, { inc_field: "categoria_id" });
 
 // Creamos un model (es la representacion de la categoria en nuestro sistema)
 var CategoriaModel = mongoose.model("Categoria", categoriaSchema);

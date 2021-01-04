@@ -77,9 +77,19 @@
 
 
 //// LIBRO ////
+<<<<<<< HEAD:datosDePrueba.json
+
 {
-    "nombre": "el Hobbit",
-    "descripcion": "Las aventuras de Bilbo y sus amiguis",
-    "categoria_id": "1",
-    "persona_id": "6"
+    "nombre": "El libro desconocido",
+    "descripcion": "Lorem ipsum",
+    "categoria_id": 1,
+    "persona_id": 1
 }
+
+{
+    "nombre": "El lobo desconocido",
+    "descripcion": "Lorem ipsum",
+    "categoria_id": 1,
+    "persona_id": 2
+}
+=======
