@@ -80,10 +80,6 @@ exports.create = async (req, res) => {
 // Actualizar una persona
 exports.update = async (req, res) => {
     try {
-        /**
-         * lógica y consultas BD para UDPATES
-         */
-
         //Verificamos que sí exista la persona (id)
         const idPersona = req.params.id;
         const respuesta = await PersonaModel.find({ id: idPersona });
@@ -105,10 +101,21 @@ exports.update = async (req, res) => {
 
         //Verificamos que el email sea el mismo
         if (email != respuesta.map(respuesta => respuesta.email)) { // Map: ya que respuesta es un array
+            /**
+             * REVISAR ACÁ
+             * PORQUE TIRA ERROR CUANDO EL MAIL
+             * NO ES MODIFICADO
+             */
             throw new Error("El email no puede ser modificado");
         }
 
         //OK => actualizamos BD
+        /**
+         * REVISAR SI ESTA ES LA CONSULTA CORRECTA
+         * porque hace cosas raras
+         * (crea un array de personas dentro de la collection)
+         * (como si agregara la persona en vez de modificarla)
+         */
         await PersonaModel.findOneAndUpdate({ id: idPersona, nombre: nombre, apellido: apellido, alias: alias});
 
         //Traemos nuevamente a la persona ahora actualizada y la enviamos
