@@ -52,13 +52,18 @@ exports.create = async (req, res) => {
             throw new Error('Faltan datos!');
         }
 
-        //OK. Agarramos los datos enviados y los pasamos a Mayusculas
+        //OK-> Agarramos los datos enviados y los pasamos a Mayusculas
         const nombre = req.body.nombre.toUpperCase();
         const apellido = req.body.apellido.toUpperCase();
         const alias = req.body.alias.toUpperCase();
         const email = req.body.email.toUpperCase();
 
-        //Verificamos que no exista la misma persona (email)
+        //Chequeamos que no nos envíen espacios en blanco
+        if (nombre.trim().length == 0 || apellido.trim().length == 0 || alias.trim().length == 0 || email.trim().length == 0) {
+            throw new Error("No se pueden enviar datos sólo con espacios");
+        }
+
+        //OK-> Verificamos que no exista la misma persona (email)
         let respuesta = await PersonaModel.find({ email: email});
         if (respuesta.length > 0) {
             throw new Error("Esa persona ya existe");
@@ -73,7 +78,7 @@ exports.create = async (req, res) => {
     }
     catch(e) {
         console.error(e.message);
-        res.status(413).send({"Error": e.message});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
@@ -88,35 +93,31 @@ exports.update = async (req, res) => {
             throw new Error("La persona que querés modificar no existe");
         }
         
-        //OK => Chequeamos que nos envien toda la info
+        //OK-> Chequeamos que nos envien toda la info
         if (!req.body.nombre || !req.body.apellido || !req.body.alias || !req.body.email ) {
             throw new Error('Faltan datos!');
         }
 
-        //OK. Agarramos los datos enviados y los pasamos a Mayusculas
+        //OK-> Agarramos los datos enviados y los pasamos a Mayusculas
         const nombre = req.body.nombre.toUpperCase();
         const apellido = req.body.apellido.toUpperCase();
         const alias = req.body.alias.toUpperCase();
         const email = req.body.email.toUpperCase();
 
-        //Verificamos que el email sea el mismo
+        //Chequeamos que no nos envíen espacios en blanco
+        if (nombre.trim().length == 0 || apellido.trim().length == 0 || alias.trim().length == 0 || email.trim().length == 0) {
+            throw new Error("No se pueden enviar datos sólo con espacios");
+        }
+
+        //Verificamos que el email sea el mismo registrado en la BD
         if (email != respuesta.map(respuesta => respuesta.email)) { // Map: ya que respuesta es un array
-            /**
-             * REVISAR ACÁ
-             * PORQUE TIRA ERROR CUANDO EL MAIL
-             * NO ES MODIFICADO
-             */
             throw new Error("El email no puede ser modificado");
         }
 
         //OK => actualizamos BD
-        /**
-         * REVISAR SI ESTA ES LA CONSULTA CORRECTA
-         * porque hace cosas raras
-         * (crea un array de personas dentro de la collection)
-         * (como si agregara la persona en vez de modificarla)
-         */
-        await PersonaModel.findOneAndUpdate({ id: idPersona, nombre: nombre, apellido: apellido, alias: alias});
+        const filtro = { id: idPersona };
+        const cambios = { nombre: nombre, apellido: apellido, alias: alias };
+        await PersonaModel.findOneAndUpdate(filtro, cambios);
 
         //Traemos nuevamente a la persona ahora actualizada y la enviamos
         let personaActualizada = await PersonaModel.find({ id: idPersona });
@@ -125,7 +126,7 @@ exports.update = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
@@ -139,6 +140,6 @@ exports.delete = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
