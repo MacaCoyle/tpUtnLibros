@@ -26,7 +26,7 @@ exports.getAll = async (req, res) => {
 exports.getById = async (req, res) => {
     try {
         const idPersona = req.params.id;
-        const persona = await PersonaModel.find({ id: idPersona });
+        const persona = await PersonaModel.find({ id: idPersona});
 
         //Comprueba si el array está vacio (si no existe la persona => error)
         if (persona.length == 0) {

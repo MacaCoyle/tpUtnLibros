@@ -48,3 +48,17 @@
 
 
 //// LIBRO ////
+
+{
+    "nombre": "El libro desconocido",
+    "descripcion": "Lorem ipsum",
+    "categoria_id": 1,
+    "persona_id": 1
+}
+
+{
+    "nombre": "El lobo desconocido",
+    "descripcion": "Lorem ipsum",
+    "categoria_id": 1,
+    "persona_id": 2
+}
