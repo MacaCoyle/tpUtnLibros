@@ -1,7 +1,7 @@
 const CategoriaModel = require('../models/categoriaModel');
 const LibroModel = require('../models/libroModel');
 
- // Listado de personas
+// Listado de categorias
 exports.getAll = async (req, res) => {
     try {
         const listado = await CategoriaModel.find();
@@ -22,7 +22,7 @@ exports.getAll = async (req, res) => {
 };
 
 
-// Obtener una persona
+// Obtener una categoria
 exports.getById = async (req, res) => {
     try {
         const idCategoria = req.params.id;
