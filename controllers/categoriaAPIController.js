@@ -8,7 +8,7 @@ exports.getAll = async (req, res) => {
 
         //Comprueba si el array está vacio (si no existen la Categoria => error)
         if (listado.length == 0) {
-            throw new Error("No se encuentran Categorias registradas.");
+            throw new Error("No se encuentran categorias registradas.");
         }
 
         // OK => enviar respuesta
@@ -17,7 +17,7 @@ exports.getAll = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({"Mensaje": e.message});
+        res.status(413).send([]);
     }
 };
 

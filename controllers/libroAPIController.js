@@ -18,7 +18,7 @@ exports.getAll = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
@@ -40,7 +40,7 @@ exports.getById = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
@@ -49,9 +49,10 @@ exports.getById = async (req, res) => {
 exports.create = async (req, res) => {
     try {
         //Chequeamos que nos envien toda la info
-        if (!req.body.nombre || !req.body.descripcion || !req.body.categoria_id ) {
-            throw new Error('Faltan datos!');
+        if (!req.body.nombre || !req.body.categoria_id ) {
+            throw new Error('Nombre y categoria son datos obligatorios.');
         }
+
         let categoria_id = req.body.categoria_id
         let persona_id = req.body.persona_id
 
@@ -88,7 +89,6 @@ exports.create = async (req, res) => {
             throw new Error("Ese libro ya existe");
         }
 
-        
         //OK-> Agregamos libro a la BD
         const instancia = LibroModel({ nombre: nombre, descripcion: descripcion, categoria_id: categoria_id, persona_id: persona_id });
         respuesta = await instancia.save();
@@ -159,7 +159,7 @@ exports.delete = async (req, res) => {
 
         // Comprueba si el array está vacio
         if (libro.length == 0) {
-            throw new Error("No se encuentra el ibro solicitada.");
+            throw new Error("No se encuentra ese libro.");
         }
 
         // Comprobamos si hay persona asociada al libro
@@ -173,6 +173,87 @@ exports.delete = async (req, res) => {
 
         console.log(respuesta);
         res.status(200).send({"Mensaje": "El libro se borró correctamente."});
+        }
+    catch(e){
+        console.error(e.message);
+        res.status(413).send({"Mensaje": e.message});
+    }
+};
+
+
+
+
+// PRESTAR un libro
+exports.prestar = async (req, res) => {
+    try {
+        //Verificamos que sí exista el libro (id)
+        const idLibro = req.params.id;
+        const idPersona = req.body.persona_id;
+
+        //OK => Chequeamos que nos envien toda la info
+        if (!idLibro || !idPersona ) {
+            throw new Error('Faltan datos!');
+        }
+
+        //Verificar que el libro existe
+        const libroDB = await LibroModel.find({ libro_id: idLibro });
+        if (libroDB.length == 0) {
+            throw new Error("El libro que querés prestar no existe");
+        }
+
+        //Verificar que el libro no este prestado
+        if (libroDB[0].persona_id != null) {
+            throw new Error("El libro que querés prestar ya está prestado");
+        }
+
+        //Verificar que la persona existe
+        const personaDB = await personaModel.find({ persona_id: idPersona });
+        if (personaDB.length == 0) {
+            throw new Error("La persona a la que le querés prestar no existe");
+        }
+
+        //OK => actualizamos BD
+        const filtro = { libro_id: idLibro };
+        const cambios = { persona_id : idPersona };
+        await LibroModel.findOneAndUpdate(filtro, cambios);
+
+        //Traemos nuevamente al ahora actualizada y la enviamos
+        let libroActualizado = await LibroModel.find({ libro_id: idLibro });
+        console.log(libroActualizado);
+        res.status(200).send(libroActualizado);
+        }
+    catch(e){
+        console.error(e.message);
+        res.status(413).send({"Mensaje": e.message});
+    }
+};
+
+// DEVOLVER un libro
+exports.devolver = async (req, res) => {
+    try {
+        //Verificamos que sí exista el libro (id)
+        const idLibro = req.params.id;
+
+        //Verificar que el libro existe
+        const libroDB = await LibroModel.find({ libro_id: idLibro });
+        if (libroDB.length == 0) {
+            throw new Error("El libro que querés devolver no existe");
+        }
+
+        //Verificar que el libro SÍ este prestado
+        if (libroDB[0].persona_id == null) {
+            throw new Error("El libro que querés devolver no estaba prestado");
+        }
+
+        //OK => actualizamos BD
+        const filtro = { libro_id: idLibro };
+        const cambios = { persona_id : null };
+        await LibroModel.findOneAndUpdate(filtro, cambios);
+
+        //Traemos nuevamente al ahora actualizada y la enviamos
+        let libroActualizado = await LibroModel.find({ libro_id: idLibro });
+        console.log(libroActualizado);
+        res.status(200).send(libroActualizado);
         }
     catch(e){
         console.error(e.message);

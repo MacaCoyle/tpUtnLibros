@@ -17,7 +17,7 @@ exports.getAll = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({"Mensaje": e.message});
+        res.status(413).send([]);
     }
 };
 
@@ -66,7 +66,7 @@ exports.create = async (req, res) => {
         //OK-> Verificamos que no exista la misma persona (email)
         let respuesta = await PersonaModel.find({ email: email});
         if (respuesta.length > 0) {
-            throw new Error("Esa persona ya existe.");
+            throw new Error("El email ya se encuentra registrado.");
         }
 
         //OK-> Agregamos persona a la BD

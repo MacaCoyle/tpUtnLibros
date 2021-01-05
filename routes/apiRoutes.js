@@ -37,10 +37,10 @@ router.get("/libro", libroAPIController.getAll);
 router.get("/libro/:id", libroAPIController.getById);
 router.post("/libro", libroAPIController.create);
 router.put("/libro/:id", libroAPIController.update);
-/*
+
 router.put("/libro/prestar/:id", libroAPIController.prestar);
 router.put("/libro/devolver/:id", libroAPIController.devolver);
-*/
+
 router.delete("/libro/:id", libroAPIController.delete);
 
 
