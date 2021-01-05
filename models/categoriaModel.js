@@ -19,3 +19,5 @@ categoriaSchema.plugin(AutoIncrement, { inc_field: "categoria_id" });
 // Creamos un model (es la representacion de la categoria en nuestro sistema)
 var CategoriaModel = mongoose.model("Categoria", categoriaSchema);
 module.exports = CategoriaModel;
+
+

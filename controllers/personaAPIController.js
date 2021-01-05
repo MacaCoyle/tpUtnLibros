@@ -1,9 +1,5 @@
 const PersonaModel = require('../models/personaModel');
-
-/************************************************************************************************/
-// COMENTAR ESTO SI DA ERROR AL INICIAR LA APP
 const LibroModel = require('../models/libroModel');
-/************************************************************************************************/
 
  // Listado de personas
 exports.getAll = async (req, res) => {
@@ -21,7 +17,7 @@ exports.getAll = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
@@ -30,7 +26,7 @@ exports.getAll = async (req, res) => {
 exports.getById = async (req, res) => {
     try {
         const idPersona = req.params.id;
-        const persona = await PersonaModel.find({ id: idPersona});
+        const persona = await PersonaModel.find({ persona_id: idPersona});
 
         //Comprueba si el array está vacio (si no existe la persona => error)
         if (persona.length == 0) {
@@ -43,7 +39,7 @@ exports.getById = async (req, res) => {
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
@@ -91,7 +87,7 @@ exports.update = async (req, res) => {
     try {
         //Verificamos que sí exista la persona (id)
         const idPersona = req.params.id;
-        const respuesta = await PersonaModel.find({ id: idPersona });
+        const respuesta = await PersonaModel.find({ persona_id: idPersona });
 
         if (respuesta.length == 0) {
             throw new Error("La persona que querés modificar no existe.");
@@ -119,12 +115,12 @@ exports.update = async (req, res) => {
         }
 
         //OK => actualizamos BD
-        const filtro = { id: idPersona };
+        const filtro = { persona_id: idPersona };
         const cambios = { nombre: nombre, apellido: apellido, alias: alias };
         await PersonaModel.findOneAndUpdate(filtro, cambios);
 
         //Traemos nuevamente a la persona ahora actualizada y la enviamos
-        let personaActualizada = await PersonaModel.find({ id: idPersona });
+        let personaActualizada = await PersonaModel.find({ persona_id: idPersona });
         console.log(personaActualizada);
         res.status(200).send(personaActualizada);
         }
@@ -139,7 +135,7 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
     try {
         const idPersona = req.params.id;
-        const persona = await PersonaModel.find({ id: idPersona });
+        const persona = await PersonaModel.find({ persona_id: idPersona });
 
         // Comprueba si el array está vacio (si no existe la persona => error)
         if (persona.length == 0) {
@@ -147,19 +143,13 @@ exports.delete = async (req, res) => {
         }
 
         // Comprobamos si hay libros asociados a la persona
-
-        /************************************************************************************************/
-        // COMENTAR ESTO SI DA ERROR AL INICIAR LA APP
-        
         const librosAsociados = await LibroModel.find({ persona_id: idPersona });
         if (librosAsociados.length > 0) {
             throw new Error("La persona tiene libros asociados. No se puede eliminar.");
         }
-        
-        /************************************************************************************************/
 
         // OK => eliminar de la BD
-        const filtro = { id: idPersona };
+        const filtro = { persona_id: idPersona };
         const respuesta = await PersonaModel.remove(filtro);
 
         console.log(respuesta);

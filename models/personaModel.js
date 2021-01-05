@@ -13,7 +13,7 @@ const personaSchema = new Schema({
 
 //Plugins para validar elementos unicos y de autoincremento
 personaSchema.plugin(mongooseUniqueValidator);
-personaSchema.plugin(AutoIncrement, { inc_field: "id" });
+personaSchema.plugin(AutoIncrement, { inc_field: "persona_id" });
 
 // Creamos un model (es la representacion de la persona en nuestro sistema)
 var PersonaModel = mongoose.model("Persona", personaSchema);

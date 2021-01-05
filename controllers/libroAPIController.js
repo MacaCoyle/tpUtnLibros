@@ -55,34 +55,41 @@ exports.create = async (req, res) => {
         let categoria_id = req.body.categoria_id
         let persona_id = req.body.persona_id
 
-        //Buscamos los campos relacionados con el id
-        const perMo = await personaModel.find ({id : persona_id})
-        const catMo = await categoriaModel.find({categoria_id : categoria_id})
-
-        //Si no existe el ID persona
-        if(perMo == 0){
-          throw new Error('No existe el id de persona')
+        if (persona_id) {
+            const perMo = await personaModel.find ({persona_id : persona_id});
+            //Si no existe el ID persona
+            if(perMo == 0){
+                throw new Error('No existe el id de persona');
+            }
+        } else {
+            persona_id = null;
         }
+
+        //Buscamos los campos relacionados con el id
+        const catMo = await categoriaModel.find({categoria_id : categoria_id});
 
         //Si no existe el ID categoria
         if(catMo == 0){
-          throw new Error('No existe la categoria')
+          throw new Error('No existe la categoria');
         }
 
         //Creamos los campos para cargar el libro
-        const nombre = req.body.nombre;
-        const descripcion = req.body.descripcion;
-        persona_id = perMo[0]._id;
-        categoria_id = catMo[0]._id;
+        const nombre = req.body.nombre.toUpperCase();
+        const descripcion = req.body.descripcion.toUpperCase();
 
-        //Verificamos que no exista el misma libro (nombre)
+        //Chequeamos que no nos envíen espacios en blanco
+        if (nombre.trim().length == 0 || descripcion.trim().length == 0 ) {
+            throw new Error("No se pueden enviar datos sólo con espacios.");
+        }
+
+        //Verificamos que no exista el mismo libro (nombre)
         let respuesta = await LibroModel.find({ nombre: nombre});
         if (respuesta.length > 0) {
             throw new Error("Ese libro ya existe");
         }
+
         
         //OK-> Agregamos libro a la BD
-        
         const instancia = LibroModel({ nombre: nombre, descripcion: descripcion, categoria_id: categoria_id, persona_id: persona_id });
         respuesta = await instancia.save();
         console.log(respuesta);
@@ -91,71 +98,84 @@ exports.create = async (req, res) => {
     }
     catch(e) {
         console.error(e.message);
-        res.status(413).send({"Error": e.message});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
 // Actualizar un libro
 exports.update = async (req, res) => {
     try {
-        /**
-         * lógica y consultas BD para UDPATES
-         */
-
         //Verificamos que sí exista el libro (id)
         const idLibro = req.params.id;
-        const respuesta = await LibroModel.find({ libro_id: idLibro });
+        const libroDB = await LibroModel.find({ libro_id: idLibro });
 
-        console.log(respuesta)
-
-        if (respuesta.length == 0) {
+        if (libroDB.length == 0) {
             throw new Error("El libro que querés modificar no existe");
         }
         
         //OK => Chequeamos que nos envien toda la info
-        if (!req.body.nombre || !req.body.descripcion || !req.body.categoria_id ) {
+        if (!req.body.nombre || !req.body.categoria_id ) {
             throw new Error('Faltan datos!');
         }
 
         //OK. Agarramos los datos enviados y los pasamos a Mayusculas
-        const nombre = req.body.nombre;
-        const descripcion = req.body.descripcion;
+        const nombre = req.body.nombre.toUpperCase();
+        const descripcion = req.body.descripcion.toUpperCase();
         const categoria_id = req.body.categoria_id;
         const persona_id = req.body.persona_id;
 
-        console.log(respuesta[0].nombre)
-        console.log(respuesta[0].categoria_id)
-        console.log(respuesta[0].persona_id)
-        
-        if(respuesta[0].nombre != nombre || respuesta[0].categoria_id != categoria_id || respuesta[0].persona_id != persona_id){
+        //Chequeamos que no nos envíen espacios en blanco
+        if (nombre.trim().length == 0 || descripcion.trim().length == 0 ) {
+            throw new Error("No se pueden enviar datos sólo con espacios.");
+        }
+
+        if(libroDB[0].nombre != nombre || libroDB[0].categoria_id != categoria_id || libroDB[0].persona_id != persona_id){
           throw new Error('Solo se puede modificar la descripcion')
         }
 
-
         //OK => actualizamos BD
-        await LibroModel.findOneAndUpdate(respuesta, { descripcion : descripcion});
+        const filtro = { libro_id: idLibro };
+        const cambios = { descripcion : descripcion };
+        await LibroModel.findOneAndUpdate(filtro, cambios);
 
-        //Traemos nuevamente a la persona ahora actualizada y la enviamos
+        //Traemos nuevamente al ahora actualizada y la enviamos
         let libroActualizado = await LibroModel.find({ libro_id: idLibro });
         console.log(libroActualizado);
         res.status(200).send(libroActualizado);
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };
 
 
-// Eliminar una persona
+// Eliminar un libro
 exports.delete = async (req, res) => {
     try {
-        /**
-         * lógica y consultas BD para DELETE
-         */
+
+        const idLibro = req.params.id;
+        const libro = await LibroModel.find({ libro_id: idLibro });
+
+        // Comprueba si el array está vacio
+        if (libro.length == 0) {
+            throw new Error("No se encuentra el ibro solicitada.");
+        }
+
+        // Comprobamos si hay persona asociada al libro
+        const personaAsociada = libro[0].persona_id;
+        if (personaAsociada > 0) {
+            throw new Error("El libro tiene una persona asociada. No se puede eliminar.");
+        }
+        // OK => eliminar de la BD
+        const filtro = { libro_id: idLibro };
+        const respuesta = await LibroModel.remove(filtro);
+
+        console.log(respuesta);
+        res.status(200).send({"Mensaje": "El libro se borró correctamente."});
         }
     catch(e){
         console.error(e.message);
-        res.status(413).send({});
+        res.status(413).send({"Mensaje": e.message});
     }
 };

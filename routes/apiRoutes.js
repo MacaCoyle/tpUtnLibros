@@ -37,13 +37,18 @@ router.get("/libro", libroAPIController.getAll);
 router.get("/libro/:id", libroAPIController.getById);
 router.post("/libro", libroAPIController.create);
 router.put("/libro/:id", libroAPIController.update);
-
 /*
 router.put("/libro/prestar/:id", libroAPIController.prestar);
 router.put("/libro/devolver/:id", libroAPIController.devolver);
-router.delete("/libro", libroAPIController.delete);
 */
+router.delete("/libro/:id", libroAPIController.delete);
 
+
+//CATEGORIA
+router.get("/categoria", categoriaAPIController.getAll);
+router.get("/categoria/:id", categoriaAPIController.getById);
+router.post("/categoria", categoriaAPIController.create);
+router.delete("/categoria/:id", categoriaAPIController.delete);
 
 
 module.exports = router;

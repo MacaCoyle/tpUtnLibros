@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const mongooseUniqueValidator = require("mongoose-unique-validator");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
-const mongooseUniqueValidator = require("mongoose-unique-validator")
 const Schema = mongoose.Schema;
 
 /* De los libros, el nombre, una descripcion, su categoria y la persona a la cual se le ha prestado el libro. Para representar que un libro se encuentra en la biblioteca se puede utilizar cualquiera de las siguientes estrategias: null para libros en la biblioteca en el campo de persona_id, que el usuario se encuentre ingresado como una persona mas. 
@@ -13,8 +12,8 @@ Para asegurar los aciertos de las busquedas, se sugiere el guardado en mayuscula
 const libroSchema = new Schema({
   nombre: { type: String, required: true, uniqueCaseInsensitive: true, unique: true },
   descripcion: { type: String, required: true },
-  categoria_id: { type: Schema.ObjectId, ref: "Categoria", required: true },
-  persona_id: { type: Schema.ObjectId, ref: "Persona" },
+  categoria_id: { type: Number, ref: "Categoria", required: true },
+  persona_id: { type: Number, ref: "Persona" },
 });
 
 
