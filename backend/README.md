@@ -39,4 +39,3 @@ Se evaluara la correcta implementacion, el uso de try/catch, async-await, cors, 
 El tp se realizara en grupos de 5 o 6 personas que seran elegidas al azar por el campus
 La entrega se realizara en formato ZIP y de deberan incluir: package.json, package-lock.json, app.json NO INCLUIR node_modules (va a desconar puntaje el envio de esta carpeta).
 Solo 1 entrega por equipo. Se debe incluir un archivo txt con el numero de grupo y el nombre y apellido de los integrantes.
-

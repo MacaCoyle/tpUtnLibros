@@ -11,7 +11,7 @@ const personaSchema = new Schema({
   email: { type: String, required: true}
 });
 
-//Plugins para validar elementos unicos y de autoincremento
+// Plugins para validar elementos unicos y de autoincremento
 personaSchema.plugin(mongooseUniqueValidator);
 personaSchema.plugin(AutoIncrement, { inc_field: "persona_id" });
 

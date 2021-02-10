@@ -1,9 +1,11 @@
 const PersonaModel = require('../models/personaModel');
 const LibroModel = require('../models/libroModel');
 
- // Listado de personas
+// Listado de personas
 exports.getAll = async (req, res) => {
     try {
+        // Test data:
+        // const listado = [{id: 1, nombre: 'Persona', apellido: 'Prueba', alias: 'Tito', email: 'correo@electronico.com'}];
         const listado = await PersonaModel.find();
 
         //Comprueba si el array está vacio (si no existen la personas => error)
@@ -20,7 +22,6 @@ exports.getAll = async (req, res) => {
         res.status(413).send([]);
     }
 };
-
 
 // Obtener una persona
 exports.getById = async (req, res) => {
@@ -42,7 +43,6 @@ exports.getById = async (req, res) => {
         res.status(413).send({"Mensaje": e.message});
     }
 };
-
 
 // Agregar una persona
 exports.create = async (req, res) => {
@@ -129,7 +129,6 @@ exports.update = async (req, res) => {
         res.status(413).send({"Mensaje": e.message});
     }
 };
-
 
 // Eliminar una persona
 exports.delete = async (req, res) => {

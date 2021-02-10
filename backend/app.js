@@ -11,12 +11,10 @@ mongoose.set('useFindAndModify', false);
 const apiRoutes = require("./routes/apiRoutes");
 
 const { urlencoded } = require("body-parser");
-
-const port = process.env.PORT ? process.env.PORT : 3000;
+const port = process.env.PORT ? process.env.PORT : 3001;
 
 // Conexion con la base de datos MongoDB
 var mongoDB = "mongodb://localhost/whereismybook";
-//Propuesta de código alternativo:
 mongoose
   .connect(mongoDB, { useNewUrlParser: true })
   .then(() => {
@@ -27,12 +25,6 @@ mongoose
     console.log("No me pude conectar con MongoDB");
     console.log(err);
   });
-/*
-mongoose.connect(mongoDB, { useNewUrlParser: true });
-mongoose.Promise = global.Promise;
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error: "));
-*/
 
 // Manejo de parmetros url y json
 app.use(urlencoded());
