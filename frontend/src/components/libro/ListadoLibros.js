@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function ListadoLibros() {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBook } from '@fortawesome/free-solid-svg-icons'
+
+export default function ListadoLibros({ categoria }) {
   const [libros, setLibros] = useState([]);
   const [librosHtml, setLibrosHtml] = useState([]);
 
@@ -9,7 +12,14 @@ export default function ListadoLibros() {
     async function connect() {
       try {
         const response = await axios.get('http://localhost:3001/libro');
-        setLibros(response.data);
+        if (categoria) {
+          // Libros filtrados por categoria
+          // TODO: Usar R y filtrar
+          setLibros(response.data);
+        } else {
+          // Todos los libros sin filtrar
+          setLibros(response.data);
+        }
       }
       catch(e) {
         console.log('Error: ', e.response.data.Mensaje);
@@ -17,7 +27,7 @@ export default function ListadoLibros() {
       }
     }
     connect();
-  },[]);
+  });
   
   useEffect(()=>{
     const tbody = libros.map(libro =>(
@@ -34,8 +44,11 @@ export default function ListadoLibros() {
 
   return (
     <div>
-      <h2>Libros</h2>
-      <table>
+      <h2>
+        <FontAwesomeIcon icon={faBook} />
+        Libros
+      </h2>
+      <table border='1'>
         <thead>
           <tr>
             <th>Id</th>

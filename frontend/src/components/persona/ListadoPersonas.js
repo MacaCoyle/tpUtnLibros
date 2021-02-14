@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUserFriends } from '@fortawesome/free-solid-svg-icons'
+
 export default function ListadoPersonas() {
   const [personas, setPersonas] = useState([]);
   const [personasHtml, setPersonasHtml] = useState([]);
@@ -34,8 +37,11 @@ export default function ListadoPersonas() {
 
   return (
     <div>
-      <h2>Personas</h2>
-      <table>
+      <h2>
+        <FontAwesomeIcon icon={faUserFriends} />
+        Personas
+      </h2>
+      <table border='1'>
         <thead>
           <tr>
             <th>Id</th>
