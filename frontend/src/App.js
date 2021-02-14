@@ -2,10 +2,17 @@ import logo from './logo.svg';
 import './App.css';
 
 import ListadoLibros from './components/libro/ListadoLibros';
+import UnLibro from './components/libro/UnLibro';
+import FormularioLibro from './components/libro/FormularioLibro';
+
 import ListadoPersonas from './components/persona/ListadoPersonas';
+import UnaPersona from './components/persona/UnaPersona';
+import FormularioPersona from './components/persona/FormularioPersona';
+
 import ListadoCategorias from './components/categoria/ListadoCategorias';
 import UnaCategoria from './components/categoria/UnaCategoria';
 import FormularioCategoria from './components/categoria/FormularioCategoria';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -39,18 +46,37 @@ function App() {
             </ul>
           </nav>
           <Switch>
+            {/* LIBROS */}
+            <Route path="/libros/agregar">
+              <FormularioLibro />
+            </Route>
+            <Route path="/libros/editar/:categoriaId">
+              <FormularioLibro />
+            </Route>
+            <Route path="/libros/:categoriaId">
+              <UnLibro />
+            </Route>
             <Route path="/libros">
               <ListadoLibros />
+            </Route>
+            {/* PERSONAS */}
+            <Route path="/personas/agregar">
+              <FormularioPersona />
+            </Route>
+            <Route path="/personas/editar/:categoriaId">
+              <FormularioPersona />
+            </Route>
+            <Route path="/personas/:categoriaId">
+              <UnaPersona />
             </Route>
             <Route path="/personas">
               <ListadoPersonas />
             </Route>
+            {/* CATEGORIAS */}
             <Route path="/categorias/agregar">
-              Agregar
               <FormularioCategoria />
             </Route>
             <Route path="/categorias/editar/:categoriaId">
-              Editar
               <FormularioCategoria />
             </Route>
             <Route path="/categorias/:categoriaId">
@@ -59,8 +85,9 @@ function App() {
             <Route path="/categorias">
               <ListadoCategorias />
             </Route>
+            {/* ROOT */}
             <Route path="/">
-              <ListadoCategorias />
+              <ListadoLibros />
             </Route>
           </Switch>
         </div>

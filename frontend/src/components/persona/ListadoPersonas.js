@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserFriends } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faUserFriends } from '@fortawesome/free-solid-svg-icons'
+
+import LineaPersona from './LineaPersona'
 
 export default function ListadoPersonas() {
   const [personas, setPersonas] = useState([]);
@@ -24,13 +26,7 @@ export default function ListadoPersonas() {
   
   useEffect(()=>{
     const tbody = personas.map(persona =>(
-      <tr>
-        <td>{persona.id}</td>
-        <td>{persona.nombre}</td>
-        <td>{persona.apellido}</td>
-        <td>{persona.alias}</td>
-        <td>{persona.email}</td>
-      </tr>
+      <LineaPersona persona={persona} key={persona.id} />
     ));
     setPersonasHtml(tbody);
   },[personas]);
@@ -41,6 +37,9 @@ export default function ListadoPersonas() {
         <FontAwesomeIcon icon={faUserFriends} />
         Personas
       </h2>
+      <a href='/personas/agregar'>
+        <FontAwesomeIcon icon={faPlus} /> Agregar
+      </a>
       <table border='1'>
         <thead>
           <tr>

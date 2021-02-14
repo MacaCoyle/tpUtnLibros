@@ -3,27 +3,27 @@ import axios from 'axios';
 import { useRouteMatch } from "react-router-dom";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTags } from '@fortawesome/free-solid-svg-icons'
+import { faBook } from '@fortawesome/free-solid-svg-icons'
 
-export default function FormularioCategoria() {
-  let match = useRouteMatch("/categorias/editar/:categoriaId");
-  if (match) { CargarCategoria(match.params.categoriaId); }
+export default function FormularioLibro() {
+  let match = useRouteMatch("/libros/editar/:libroId");
+  if (match) { CargarLibro(match.params.libroId); }
   
-  const [categoria, setCategoria] = useState({id: '', nombre: ''});
+  const [libro, setLibro] = useState({id: '', nombre: '', descripcion: ''});
   
-  function CargarCategoria(categoriaId) {
+  function CargarLibro(libroId) {
     useEffect(()=>{
       async function connect() {
         try {
-          const response = await axios.get('http://localhost:3001/categoria/' + categoriaId);
-          setCategoria(response.data);
+          const response = await axios.get('http://localhost:3001/libro/' + libroId);
+          setLibro(response.data);
         } catch(e) {
           console.log('Error: ', e.response.status);
-          setCategoria({id: 'Error', nombre: e.response.status})
+          setLibro({id: 'Error', nombre: e.response.status})
         }
       }
       connect();
-    },[categoriaId]);
+    },[libroId]);
   };
 
   const handleChange = (event) => {  
@@ -51,18 +51,26 @@ export default function FormularioCategoria() {
   return (
     <div>
       <h2>
-        <FontAwesomeIcon icon={faTags} />
-        Categorias
+        <FontAwesomeIcon icon={faBook} />
+        Libros
       </h2>
-      Formulario Categoria 
+      Formulario Libro 
       <h3>
-        {(categoria.id) ? 'Editar' : 'Agregar'}
+        {(libro.id) ? 'Editar' : 'Agregar'}
       </h3>
       <form onSubmit={handleSubmit()}>
-        <input type="hidden" name="id" value={categoria.id} onChange={handleChange()} />
+        <input type="hidden" name="id" value={libro.id} onChange={handleChange()} />
         <label>
           Nombre:
-          <input type="text" name="nombre" value={categoria.nombre} onChange={handleChange()} />
+          <input type="text" name="nombre" value={libro.nombre} onChange={handleChange()} />
+        </label>
+        <label>
+          Descripcion:
+          <input type="text" name="descripcion" value={libro.descripcion} onChange={handleChange()} />
+        </label>
+        <label>
+          Categoria:
+          <input type="text" name="categoria_id" value={libro.categoria_id} onChange={handleChange()} />
         </label>
         <input type="submit" value="Grabar"  onChange={handleChange()} />
       </form>

@@ -3,12 +3,12 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
-export default function LineaCategoria({ categoria }) {
+export default function LineaLibro({ libro, categoria, persona }) {
   const eliminar = () => {  
     // TODO: agregar mensaje de confirmacion
     async function connect() {
       try {
-        const response = await axios.delete('http://localhost:3001/categoria/' + categoria.id);
+        const response = await axios.delete('http://localhost:3001/libro/' + libro.id);
         console.log(response);
         // TODO: mostrar success!
       }
@@ -22,15 +22,18 @@ export default function LineaCategoria({ categoria }) {
 
   return (
     <tr>
-      <td>{categoria.id}</td>
-      <td>{categoria.nombre}</td>
+      <td>{libro.id}</td>
+      <td>{libro.nombre}</td>
+      <td>{libro.descripcion}</td>
+      <td>{categoria && categoria.nombre}</td>
+      <td>{persona && persona.nombre} {persona && persona.apellido}</td>
       <td>
-        <a href={'/categorias/' + categoria.id}>
+        <a href={'/libros/' + libro.id}>
           <FontAwesomeIcon icon={faEye} />
         </a>
       </td>
       <td>
-        <a href={'/categorias/editar/' + categoria.id}>
+        <a href={'/libros/editar/' + libro.id}>
           <FontAwesomeIcon icon={faPencilAlt} />
         </a>
       </td>

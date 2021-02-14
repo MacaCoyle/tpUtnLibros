@@ -45,9 +45,6 @@ export default function ListadoCategorias() {
           <tr>
             <th>Id</th>
             <th>Nombre</th>
-            <th></th>
-            <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>

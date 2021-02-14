@@ -1,29 +1,48 @@
-import ListadoLibros from '../libro/ListadoLibros';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useRouteMatch } from "react-router-dom";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTag } from '@fortawesome/free-solid-svg-icons'
+import ListadoLibros from '../libro/ListadoLibros';
 
-export default function UnaCategoria({ categoria }) {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTag, faTags } from '@fortawesome/free-solid-svg-icons'
+
+export default function UnaCategoria() {
   let match = useRouteMatch("/categorias/:categoriaId");
   let categoriaId = match.params.categoriaId;
-  console.log(categoriaId);
-
-  // TODO: get categoria ID = match.params.categoriaId
-  // categoria = axios...
+  
+  const [categoria, setCategoria] = useState({});
+  
+  useEffect(()=>{
+    async function connect() {
+      try {
+        const response = await axios.get('http://localhost:3001/categoria/' + categoriaId);
+        setCategoria(response.data);
+      }
+      catch(e) {
+        console.log('Error: ', e.response.status);
+        setCategoria({id: 'Error', nombre: e.response.status})
+      }
+    }
+    connect();
+  });
 
   return (
     <div>
-      Una categoria
-      <FontAwesomeIcon icon={faTag} />
-      <b>{categoria}</b>
-      {/* <b>{categoria.nombre}</b> */}
+      <h2>
+        <FontAwesomeIcon icon={faTags} />
+        Categorias
+      </h2>
+      <h3>
+        <FontAwesomeIcon icon={faTag} />
+        {categoria.nombre}
+      </h3>
       <pre>
-        {/* id: {categoria.id} */}
-        {/* nombre: {categoria.nombre} */}
+        id: {categoria.id} <br/>
+        nombre: {categoria.nombre}
       </pre>
-      {/* <ListadoLibros categoria={categoriaId} /> */}
+      Libros de esta categoria:
+      <ListadoLibros categoria={categoriaId} />
     </div>
   )
 }
