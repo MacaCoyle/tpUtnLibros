@@ -9,7 +9,12 @@ export default function FormularioLibro() {
   let match = useRouteMatch("/libros/editar/:libroId");
   if (match) { CargarLibro(match.params.libroId); }
   
-  const [libro, setLibro] = useState({id: '', nombre: '', descripcion: ''});
+  const [libro, setLibro] = useState({
+    id: '',
+    nombre: '',
+    descripcion: '',
+    categoria: ''
+  });
   
   function CargarLibro(libroId) {
     useEffect(()=>{
@@ -25,12 +30,22 @@ export default function FormularioLibro() {
       connect();
     },[libroId]);
   };
+  
 
-  const handleChange = (event) => {  
-    //this.setState({value: event.target.value});
-  };
+ const handleInputChange = (event) => { 
+   console.log(event.target.value);
+   setLibro({
+     ...libro,
+     [event.target.name] : event.target.value
+   })
+
+};
+
+
   
   const handleSubmit = (event) => {  
+    event.preventDefault();
+    console.log(libro);
     // async function connect() {
     //   try {
     //     const response = await axios.post('http://localhost:3001/categoria/');
@@ -58,21 +73,36 @@ export default function FormularioLibro() {
       <h3>
         {(libro.id) ? 'Editar' : 'Agregar'}
       </h3>
-      <form onSubmit={handleSubmit()}>
-        <input type="hidden" name="id" value={libro.id} onChange={handleChange()} />
+      <form onSubmit={handleSubmit}>
+        <input type="hidden" name="id" value={libro.id}/>
         <label>
           Nombre:
-          <input type="text" name="nombre" value={libro.nombre} onChange={handleChange()} />
+          <input
+            placeholder="Ingrese nombre"
+            type="text"
+            name="nombre"
+            value={libro.nombre}
+            onChange={handleInputChange} />
         </label>
         <label>
           Descripcion:
-          <input type="text" name="descripcion" value={libro.descripcion} onChange={handleChange()} />
+          <input
+            placeholder="Ingrese descripcion"
+            type="text"
+            name="descripcion"
+            value={libro.descripcion}
+            onChange={handleInputChange} />
         </label>
         <label>
           Categoria:
-          <input type="text" name="categoria_id" value={libro.categoria_id} onChange={handleChange()} />
+          <input
+            placeholder="Ingrese categoria"
+            type="text"
+            name="categoria"
+            value={libro.categoria}
+            onChange={handleInputChange} />
         </label>
-        <input type="submit" value="Grabar"  onChange={handleChange()} />
+        <button type="submit">Guardar</button>
       </form>
     </div>
   )
