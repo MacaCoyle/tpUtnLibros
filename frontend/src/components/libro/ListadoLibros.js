@@ -25,6 +25,7 @@ export default function ListadoLibros({ categoria, persona }) {
         } else {
           // Todos los libros sin filtrar
           setLibros(response.data);
+          console.log(response.data);
         }
       } catch(e) {
         console.log('Error: ', e.response.data.Mensaje);

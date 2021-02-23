@@ -22,18 +22,20 @@ export default function LineaLibro({ libro, categoria, persona }) {
 
   return (
     <tr>
-      <td>{libro.id}</td>
+      <td>{libro.libro_id}</td>
       <td>{libro.nombre}</td>
       <td>{libro.descripcion}</td>
       <td>{categoria && categoria.nombre}</td>
+      {/*<td>{libro.categoria_id}</td>*/}
       <td>{persona && persona.nombre} {persona && persona.apellido}</td>
+      {/*<td>{libro.persona_id}</td>*/}
       <td>
-        <a href={'/libros/' + libro.id}>
+        <a href={'/libros/' + libro.libro_id}>
           <FontAwesomeIcon icon={faEye} />
         </a>
       </td>
       <td>
-        <a href={'/libros/editar/' + libro.id}>
+        <a href={'/libros/editar/' + libro.libro_id}>
           <FontAwesomeIcon icon={faPencilAlt} />
         </a>
       </td>
