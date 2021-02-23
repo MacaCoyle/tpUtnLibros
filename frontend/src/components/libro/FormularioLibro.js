@@ -8,42 +8,42 @@ import { faBook } from '@fortawesome/free-solid-svg-icons'
 export default function FormularioLibro() {
   let match = useRouteMatch("/libros/editar/:libroId");
   if (match) { CargarLibro(match.params.libroId); }
-  
+
   const [libro, setLibro] = useState({
     id: '',
     nombre: '',
     descripcion: '',
     categoria: ''
   });
-  
+
   function CargarLibro(libroId) {
-    useEffect(()=>{
+    useEffect(() => {
       async function connect() {
         try {
           const response = await axios.get('http://localhost:3001/libro/' + libroId);
           setLibro(response.data);
-        } catch(e) {
+        } catch (e) {
           console.log('Error: ', e.response.status);
-          setLibro({id: 'Error', nombre: e.response.status})
+          setLibro({ id: 'Error', nombre: e.response.status })
         }
       }
       connect();
-    },[libroId]);
+    }, [libroId]);
   };
-  
-
- const handleInputChange = (event) => { 
-   console.log(event.target.value);
-   setLibro({
-     ...libro,
-     [event.target.name] : event.target.value
-   })
-
-};
 
 
-  
-  const handleSubmit = (event) => {  
+  const handleInputChange = (event) => {
+    console.log(event.target.value);
+    setLibro({
+      ...libro,
+      [event.target.name]: event.target.value
+    })
+
+  };
+
+
+
+  const handleSubmit = (event) => {
     event.preventDefault();
     console.log(libro);
 
@@ -59,7 +59,7 @@ export default function FormularioLibro() {
     //   }
     // }
     // connect();
-    
+
     //alert('A name was submitted: ' + event);
     //vent.preventDefault();
   };
@@ -70,12 +70,12 @@ export default function FormularioLibro() {
         <FontAwesomeIcon icon={faBook} />
         Libros
       </h2>
-      Formulario Libro 
+      Formulario Libro
       <h3>
         {(libro.id) ? 'Editar' : 'Agregar'}
       </h3>
       <form onSubmit={handleSubmit}>
-        <input type="hidden" name="id" value={libro.id}/>
+        <input type="hidden" name="id" value={libro.id} />
         <label>
           Nombre:
           <input

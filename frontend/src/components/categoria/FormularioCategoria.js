@@ -8,45 +8,37 @@ import { faTags } from '@fortawesome/free-solid-svg-icons'
 export default function FormularioCategoria() {
   let match = useRouteMatch("/categorias/editar/:categoriaId");
   if (match) { CargarCategoria(match.params.categoriaId); }
-  
-  const [categoria, setCategoria] = useState({id: '', nombre: ''});
-  
+
+  const [categoria, setCategoria] = useState({ id: '', nombre: '' });
+
   function CargarCategoria(categoriaId) {
-    useEffect(()=>{
+    useEffect(() => {
       async function connect() {
         try {
           const response = await axios.get('http://localhost:3001/categoria/' + categoriaId);
           setCategoria(response.data);
-        } catch(e) {
+        } catch (e) {
           console.log('Error: ', e.response.status);
-          setCategoria({id: 'Error', nombre: e.response.status})
+          setCategoria({ id: 'Error', nombre: e.response.status })
         }
       }
       connect();
-    },[categoriaId]);
+    }, [categoriaId]);
   };
 
-  const handleChange = (event) => {  
-    //this.setState({value: event.target.value});
+  const handleChange = (event) => {
+    setCategoria({ nombre: event.target.value });
   };
-  
-  const handleSubmit = (event) => {  
-    // async function connect() {
-    //   try {
-    //     const response = await axios.post('http://localhost:3001/categoria/');
-    //     console.log(response);
-    //     // TODO: mostrar success!
-    //   }
-    //   catch(e) {
-    //     console.log('Error: ', e.response.status);
-    //     // TODO: mostrar mensaje de error
-    //   }
-    // }
-    // connect();
-    
-    //alert('A name was submitted: ' + event);
-    //vent.preventDefault();
-  };
+
+  const handleSubmit = () => {
+    axios
+      .post('http://localhost:3001/categoria', { nombre: categoria.nombre })
+      .then(console.log("Envie todo vamos"))
+      .catch(console.log("fallo todo"))
+
+
+    alert('A name was submitted: ' + categoria.nombre);
+  }
 
   return (
     <div>
@@ -54,17 +46,17 @@ export default function FormularioCategoria() {
         <FontAwesomeIcon icon={faTags} />
         Categorias
       </h2>
-      Formulario Categoria 
+      Formulario Categoria
       <h3>
         {(categoria.id) ? 'Editar' : 'Agregar'}
       </h3>
-      <form onSubmit={handleSubmit()}>
-        <input type="hidden" name="id" value={categoria.id} onChange={handleChange()} />
+      <form onSubmit={handleSubmit}>
+        <input type="hidden" name="id" value={categoria.id} />
         <label>
           Nombre:
-          <input type="text" name="nombre" value={categoria.nombre} onChange={handleChange()} />
+          <input type="text" name="nombre" value={categoria.nombre} onChange={handleChange} />
         </label>
-        <input type="submit" value="Grabar"  onChange={handleChange()} />
+        <input type="submit" value="Grabar" />
       </form>
     </div>
   )
