@@ -46,6 +46,7 @@ export default function FormularioLibro() {
   const handleSubmit = (event) => {  
     event.preventDefault();
     console.log(libro);
+
     // async function connect() {
     //   try {
     //     const response = await axios.post('http://localhost:3001/categoria/');
