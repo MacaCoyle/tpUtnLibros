@@ -19,6 +19,10 @@ export default function FormularioLibro() {
     categoria_id: "",
   });
 
+  const [personaId, setPersonaId] = useState({
+    persona_id: ""
+  });
+
   function CargarLibro(libroId) {
     useEffect(() => {
       async function connect() {
@@ -26,7 +30,11 @@ export default function FormularioLibro() {
           const response = await axios.get(
             "http://localhost:3001/libro/" + libroId
           );
-          setLibro(response.data);
+          await setLibro(response.data[0]);
+          console.log(libro);
+          setPersonaId({
+            persona_id: libro.persona_id
+          });
         } catch (e) {
           console.log("Error: ", e.response.status);
           setLibro({ id: "Error", nombre: e.response.status });
@@ -46,24 +54,67 @@ export default function FormularioLibro() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(libro);
+    console.log("libro");
 
     async function connect() {
-      try {
-        const response = await axios.post('http://localhost:3001/libro/', libro);
-        console.log(response);
-        // TODO: mostrar success!
-      }
-      catch(e) {
-        console.log('Error: ', e.response.status);
-        // TODO: mostrar mensaje de error
-      }
+      if (libro.libro_id) {
+        try {
+          const response = await axios.put('http://localhost:3001/libro/' + libro.libro_id, libro);
+          console.log(response);
+          // TODO: mostrar success!
+        }
+        catch(e) {
+          console.log('Error: ', e.response.status);
+          // TODO: mostrar mensaje de error
+        }
+      } else {
+        try {
+          const response = await axios.post('http://localhost:3001/libro/', libro);
+          console.log(response);
+          // TODO: mostrar success!
+        }
+        catch(e) {
+          console.log('Error: ', e.response.status);
+          // TODO: mostrar mensaje de error
+        }
+      } 
     }
     connect();
 
     //alert('A name was submitted: ' + event);
     //vent.preventDefault();
   };
+
+  const handleInputPrestar = (event) => {
+    console.log(event.target.value);
+    setPersonaId({
+      ...personaId,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handlePrestar = (event) => {
+    event.preventDefault();
+    console.log("prestar");
+
+    async function connect() {
+        try {
+          const response = await axios.put('http://localhost:3001/libro/prestar/' + libro.libro_id, personaId);
+          console.log(response);
+          // TODO: mostrar success!
+        }
+        catch(e) {
+          console.log('Error: ', e.response.status);
+          // TODO: mostrar mensaje de error
+        }
+    }
+    connect();
+
+    //alert('A name was submitted: ' + event);
+    //vent.preventDefault();
+  };
+  
+
 
   return (
     <div>
@@ -72,7 +123,7 @@ export default function FormularioLibro() {
         Libros
       </h2>
       Formulario Libro
-      <h3>{libro.id ? "Editar" : "Agregar"}</h3>
+      <h3>{libro.libro_id ? "Editar" : "Agregar"}</h3>
       <form onSubmit={handleSubmit}>
         <input type="hidden" name="libro_id" value={libro.libro_id} />
         <label>
@@ -106,6 +157,21 @@ export default function FormularioLibro() {
           />
         </label>
         <button type="submit">Guardar</button>
+      </form>
+      
+      <h2>Prestar</h2>
+      <form onSubmit={handlePrestar}>
+      <label>
+          Prestado a:
+          <input
+            placeholder="Ingrese persona id"
+            type="text"
+            name="persona_id"
+            value={personaId.persona_id}
+            onChange={handleInputPrestar}
+          />
+        </label>
+        <button type="submit">Prestar</button>
       </form>
     </div>
   );

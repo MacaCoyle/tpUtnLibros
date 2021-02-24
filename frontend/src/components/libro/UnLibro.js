@@ -60,6 +60,24 @@ export default function UnLibro() {
     }
   },[libro]);
 
+  const handleDevolver = () => {
+    //console.log("devolcido");
+
+    async function connect() {
+      try {
+        const response = await axios.put('http://localhost:3001/libro/devolver/' + libro.libro_id);
+        console.log(response);
+        // TODO: mostrar success!
+      }
+      catch(e) {
+        console.log('Error: ', e.response.status);
+        // TODO: mostrar mensaje de error
+      }
+    }
+    connect();
+
+  };
+
   return (
     <div>
       <h2>
@@ -78,11 +96,13 @@ export default function UnLibro() {
       </p>
       <p>
         ¿Esta prestado? {persona.persona_id ? 'SI' : 'NO'}<br/>
+
         Persona: {persona.persona_id && persona.nombre} {persona.persona_id && persona.apellido} <br/>
         Alias: {persona.persona_id && persona.alias} <br/>
         Email: {persona.persona_id && persona.email} <br/>
-        {persona.id && "BOTON DEVOLVER"}
+        {persona.persona_id && <button onClick={handleDevolver}>Devolver</button>}
       </p>
+      
     </div>
   )
 }
