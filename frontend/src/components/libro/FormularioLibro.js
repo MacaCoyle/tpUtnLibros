@@ -23,6 +23,9 @@ export default function FormularioLibro() {
     persona_id: ""
   });
 
+  const [categorias, setCategorias] = useState([]);
+  const [personas, setPersonas] = useState([]);
+
   function CargarLibro(libroId) {
     useEffect(() => {
       async function connect() {
@@ -43,6 +46,36 @@ export default function FormularioLibro() {
       connect();
     }, [libroId]);
   }
+
+  useEffect(()=>{
+    async function connect() {
+      try {
+        const response = await axios.get('http://localhost:3001/categoria');
+        await setCategorias(response.data);
+        console.log(categorias);
+      }
+      catch(e) {
+        console.log('Error: ', e.response.status);
+        setCategorias([{id: 'Error', nombre: e.response.status}])
+      }
+    }
+    connect();
+  },[]);
+
+  useEffect(()=>{
+    async function connect() {
+      try {
+        const response = await axios.get('http://localhost:3001/persona');
+        await setPersonas(response.data);
+        console.log(personas);
+      }
+      catch(e) {
+        console.log('Error: ', e.response.status);
+        setPersonas([{id: 'Error', nombre: e.response.status}])
+      }
+    }
+    connect();
+  },[]);
 
   const handleInputChange = (event) => {
     console.log(event.target.value);
