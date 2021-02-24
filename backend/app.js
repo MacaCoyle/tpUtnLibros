@@ -1,13 +1,13 @@
 const express = require("express");
-const cors = require('cors');
-
+const cors = require("cors");
 const app = express();
+
 app.use(cors());
 
 const mongoose = require("mongoose");
 // Make Mongoose use `findOneAndUpdate()`. Note that this option is `true`
 // by default, you need to set it to false.
-mongoose.set('useFindAndModify', false);
+mongoose.set("useFindAndModify", false);
 const apiRoutes = require("./routes/apiRoutes");
 
 const { urlencoded } = require("body-parser");
