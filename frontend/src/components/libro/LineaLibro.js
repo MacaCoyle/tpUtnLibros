@@ -8,7 +8,7 @@ export default function LineaLibro({ libro, categoria, persona }) {
     // TODO: agregar mensaje de confirmacion
     async function connect() {
       try {
-        const response = await axios.delete('http://localhost:3001/libro/' + libro.id);
+        const response = await axios.delete('http://localhost:3001/libro/' + libro.libro_id);
         console.log(response);
         // TODO: mostrar success!
       }
@@ -25,9 +25,9 @@ export default function LineaLibro({ libro, categoria, persona }) {
       <td>{libro.libro_id}</td>
       <td>{libro.nombre}</td>
       <td>{libro.descripcion}</td>
-      <td>{categoria && categoria.nombre}</td>
+      <td>{libro.categoria_id} {categoria && categoria.nombre}</td>
       {/*<td>{libro.categoria_id}</td>*/}
-      <td>{persona && persona.nombre} {persona && persona.apellido}</td>
+      <td>{libro.persona_id} {persona && persona.nombre} {persona && persona.apellido}</td>
       {/*<td>{libro.persona_id}</td>*/}
       <td>
         <a href={'/libros/' + libro.libro_id}>
@@ -40,7 +40,7 @@ export default function LineaLibro({ libro, categoria, persona }) {
         </a>
       </td>
       <td>
-        <button onClick={() => eliminar()}>
+        <button onClick={eliminar}>
           <FontAwesomeIcon icon={faTrashAlt} />
         </button>
       </td>

@@ -12,10 +12,11 @@ export default function FormularioLibro() {
   }
 
   const [libro, setLibro] = useState({
-    id: "",
+    libro_id: "",
+    persona_id: null,
     nombre: "",
     descripcion: "",
-    categoria: "",
+    categoria_id: "",
   });
 
   function CargarLibro(libroId) {
@@ -46,29 +47,19 @@ export default function FormularioLibro() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(libro);
-    axios
-      .post("https://localhost:3001/libro", libro)
-      .then((response) => {
-        console.log("Hey funciono esta es tu response:");
+
+    async function connect() {
+      try {
+        const response = await axios.post('http://localhost:3001/libro/', libro);
         console.log(response);
-        // Hace algo
-      })
-      .catch((e) => {
-        console.log(e);
-        //Show me the err
-      });
-    // async function connect() {
-    //   try {
-    //     const response = await axios.post('http://localhost:3001/categoria/');
-    //     console.log(response);
-    //     // TODO: mostrar success!
-    //   }
-    //   catch(e) {
-    //     console.log('Error: ', e.response.status);
-    //     // TODO: mostrar mensaje de error
-    //   }
-    // }
-    // connect();
+        // TODO: mostrar success!
+      }
+      catch(e) {
+        console.log('Error: ', e.response.status);
+        // TODO: mostrar mensaje de error
+      }
+    }
+    connect();
 
     //alert('A name was submitted: ' + event);
     //vent.preventDefault();
@@ -83,7 +74,7 @@ export default function FormularioLibro() {
       Formulario Libro
       <h3>{libro.id ? "Editar" : "Agregar"}</h3>
       <form onSubmit={handleSubmit}>
-        <input type="hidden" name="id" value={libro.id} />
+        <input type="hidden" name="libro_id" value={libro.libro_id} />
         <label>
           Nombre:
           <input
@@ -109,8 +100,8 @@ export default function FormularioLibro() {
           <input
             placeholder="Ingrese categoria"
             type="text"
-            name="categoria"
-            value={libro.categoria}
+            name="categoria_id"
+            value={libro.categoria_id}
             onChange={handleInputChange}
           />
         </label>

@@ -65,9 +65,9 @@ export default function ListadoLibros({ categoria, persona }) {
 
   useEffect(()=>{
     const tbody = libros.map(libro =>(
-      <LineaLibro libro={libro} key={libro.id} 
-                  categoria={categorias.find(categoria => categoria.id === libro.categoria_id)} 
-                  persona={personas.find(persona => (libro.persona_id && persona.id === libro.persona_id))} />
+      <LineaLibro libro={libro} key={libro.libro_id} 
+                  categoria={categorias.find(categoria => categoria.categoria_id === libro.categoria_id)} 
+                  persona={personas.find(persona => (libro.persona_id && persona.persona_id === libro.persona_id))} />
     ));
     setLibrosHtml(tbody);
   },[libros, categorias, personas]);

@@ -17,7 +17,7 @@ export default function UnaCategoria() {
     async function connect() {
       try {
         const response = await axios.get('http://localhost:3001/categoria/' + categoriaId);
-        setCategoria(response.data);
+        setCategoria(response.data[0]);
       }
       catch(e) {
         console.log('Error: ', e.response.status);
@@ -38,7 +38,7 @@ export default function UnaCategoria() {
         {categoria.nombre}
       </h3>
       <pre>
-        id: {categoria.id} <br/>
+        id: {categoria.categoria_id} <br/>
         nombre: {categoria.nombre}
       </pre>
       Libros de esta categoria:

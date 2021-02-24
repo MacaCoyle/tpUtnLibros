@@ -11,13 +11,14 @@ export default function UnLibro() {
   
   const [libro, setLibro] = useState({});
   const [categoria, setCategoria] = useState({});
-  const [persona, setPersona] = useState({id: ''});
+  const [persona, setPersona] = useState({persona_id: ''});
 
   useEffect(()=>{
     async function connect() {
       try {
         const response = await axios.get('http://localhost:3001/libro/' + libroId);
-        setLibro(response.data);
+        setLibro(response.data[0]);
+        console.log(response.data[0]);
       }
       catch(e) {
         console.log('Error: ', e.response.status);
@@ -31,7 +32,8 @@ export default function UnLibro() {
     async function connect() {
       try {
         const response = await axios.get('http://localhost:3001/categoria/' + libro.categoria_id);
-        setCategoria(response.data);
+        setCategoria(response.data[0]);
+        console.log(response.data[0]);
       }
       catch(e) {
         console.log('Error: ', e.response.status);
@@ -46,7 +48,8 @@ export default function UnLibro() {
       async function connect() {
         try {
           const response = await axios.get('http://localhost:3001/persona/' + libro.persona_id);
-          setPersona(response.data);
+          setPersona(response.data[0]);
+          console.log(response.data[0]);
         }
         catch(e) {
           console.log('Error: ', e.response.status);
@@ -74,10 +77,10 @@ export default function UnLibro() {
         Categoria: {categoria && categoria.nombre}
       </p>
       <p>
-        ¿Esta prestado? {persona.id ? 'SI' : 'NO'}<br/>
-        Persona: {persona.id && persona.nombre} {persona.id && persona.apellido} <br/>
-        Alias: {persona.id && persona.alias} <br/>
-        Email: {persona.id && persona.email} <br/>
+        ¿Esta prestado? {persona.persona_id ? 'SI' : 'NO'}<br/>
+        Persona: {persona.persona_id && persona.nombre} {persona.persona_id && persona.apellido} <br/>
+        Alias: {persona.persona_id && persona.alias} <br/>
+        Email: {persona.persona_id && persona.email} <br/>
         {persona.id && "BOTON DEVOLVER"}
       </p>
     </div>

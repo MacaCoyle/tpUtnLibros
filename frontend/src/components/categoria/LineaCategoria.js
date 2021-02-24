@@ -1,16 +1,18 @@
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 export default function LineaCategoria({ categoria }) {
   const eliminar = () => {  
     // TODO: agregar mensaje de confirmacion
     async function connect() {
       try {
-        const response = await axios.delete('http://localhost:3001/categoria/' + categoria.id);
+        const response = await axios.delete('http://localhost:3001/categoria/' + categoria.categoria_id);
         console.log(response);
         // TODO: mostrar success!
+        //actualis lista categoria
+
       }
       catch(e) {
         console.log('Error: ', e.response.status);
@@ -22,20 +24,15 @@ export default function LineaCategoria({ categoria }) {
 
   return (
     <tr>
-      <td>{categoria.id}</td>
+      <td>{categoria.categoria_id}</td>
       <td>{categoria.nombre}</td>
       <td>
-        <a href={'/categorias/' + categoria.id}>
+        <a href={'/categorias/' + categoria.categoria_id}>
           <FontAwesomeIcon icon={faEye} />
         </a>
       </td>
       <td>
-        <a href={'/categorias/editar/' + categoria.id}>
-          <FontAwesomeIcon icon={faPencilAlt} />
-        </a>
-      </td>
-      <td>
-        <button onClick={() => eliminar()}>
+        <button onClick={eliminar}>
           <FontAwesomeIcon icon={faTrashAlt} />
         </button>
       </td>

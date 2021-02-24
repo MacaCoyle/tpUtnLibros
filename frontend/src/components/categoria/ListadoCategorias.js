@@ -26,7 +26,7 @@ export default function ListadoCategorias() {
   
   useEffect(()=>{
     const tbody = categorias.map(categoria =>(
-      <LineaCategoria categoria={categoria} key={categoria.id} />
+      <LineaCategoria categoria={categoria} key={categoria.categoria_id} />
     ));
     setCategoriasHtml(tbody);
   },[categorias]);

@@ -9,14 +9,14 @@ export default function FormularioPersona() {
   let match = useRouteMatch("/personas/editar/:personaId");
   if (match) { CargarPersona(match.params.personaId); }
 
-  const [persona, setPersona] = useState({ id: '', nombre: '', apellido: '', alias: '', email: '' });
+  const [persona, setPersona] = useState({ persona_id: '', nombre: '', apellido: '', alias: '', email: '' });
 
   function CargarPersona(personaId) {
     useEffect(() => {
       async function connect() {
         try {
           const response = await axios.get('http://localhost:3001/persona/' + personaId);
-          setPersona(response.data);
+          setPersona(response.data[0]);
         } catch (e) {
           console.log('Error: ', e.response.status);
           setPersona({ id: 'Error', nombre: e.response.status })
@@ -27,26 +27,43 @@ export default function FormularioPersona() {
   };
 
   const handleChange = (event) => {
-    persona[event.target.id] = event.target.value;
-    setPersona({ ...persona });
+    console.log(event.target.value);
+    setPersona({
+      ...persona,
+      [event.target.name]: event.target.value,
+    });
   };
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     async function connect() {
-      try {
-        const response = await axios.post('http://localhost:3001/categoria/');
-        console.log(response);
-        // TODO: mostrar success!
+      if (persona.persona_id) {
+        try {
+          const response = await axios.put('http://localhost:3001/persona/' + persona.persona_id, persona);
+          console.log(response);
+          // TODO: mostrar success!
+        }
+        catch (e) {
+          console.log('Error: ', e.response.status);
+          // TODO: mostrar mensaje de error
+        }
+      } else {
+        try {
+          const response = await axios.post('http://localhost:3001/persona/', persona);
+          console.log(response);
+          // TODO: mostrar success!
+        }
+        catch (e) {
+          console.log('Error: ', e.response.status);
+          // TODO: mostrar mensaje de error
+        }
       }
-      catch (e) {
-        console.log('Error: ', e.response.status);
-        // TODO: mostrar mensaje de error
-      }
+
+
+
+
     }
     connect();
-
-    alert('A name was submitted: ' + event);
-    event.preventDefault();
   };
 
   return (
@@ -57,10 +74,10 @@ export default function FormularioPersona() {
       </h2>
       Formulario Persona
       <h3>
-        {(persona.id) ? 'Editar' : 'Agregar'}
+        {(persona.persona_id) ? 'Editar' : 'Agregar'}
       </h3>
       <form onSubmit={handleSubmit}>
-        <input type="hidden" name="id" value={persona.id} onChange={handleChange} />
+        <input type="hidden" name="persona_id" value={persona.persona_id} onChange={handleChange} />
         <label>
           Nombre:
           <input type="text" name="nombre" value={persona.nombre} onChange={handleChange} />

@@ -17,7 +17,7 @@ export default function UnaPersona() {
     async function connect() {
       try {
         const response = await axios.get('http://localhost:3001/persona/' + personaId);
-        setPersona(response.data);
+        setPersona(response.data[0]);
       }
       catch(e) {
         console.log('Error: ', e.response.status);

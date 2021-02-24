@@ -8,7 +8,7 @@ export default function LineaPersona({ persona }) {
     // TODO: agregar mensaje de confirmacion
     async function connect() {
       try {
-        const response = await axios.delete('http://localhost:3001/persona/' + persona.id);
+        const response = await axios.delete('http://localhost:3001/persona/' + persona.persona_id);
         console.log(response);
         // TODO: mostrar success!
       }
@@ -22,23 +22,23 @@ export default function LineaPersona({ persona }) {
 
   return (
     <tr>
-      <td>{persona.id}</td>
+      <td>{persona.persona_id}</td>
       <td>{persona.nombre}</td>
       <td>{persona.apellido}</td>
       <td>{persona.alias}</td>
       <td>{persona.email}</td>
       <td>
-        <a href={'/personas/' + persona.id}>
+        <a href={'/personas/' + persona.persona_id}>
           <FontAwesomeIcon icon={faEye} />
         </a>
       </td>
       <td>
-        <a href={'/personas/editar/' + persona.id}>
+        <a href={'/personas/editar/' + persona.persona_id}>
           <FontAwesomeIcon icon={faPencilAlt} />
         </a>
       </td>
       <td>
-        <button onClick={() => eliminar()}>
+        <button onClick={eliminar}>
           <FontAwesomeIcon icon={faTrashAlt} />
         </button>
       </td>

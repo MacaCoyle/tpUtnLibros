@@ -9,14 +9,16 @@ export default function FormularioCategoria() {
   let match = useRouteMatch("/categorias/editar/:categoriaId");
   if (match) { CargarCategoria(match.params.categoriaId); }
 
-  const [categoria, setCategoria] = useState({ id: '', nombre: '' });
+  const [categoria, setCategoria] = useState({ categoria_id: '', nombre: '' });
 
   function CargarCategoria(categoriaId) {
+    console.log(categoriaId);
     useEffect(() => {
       async function connect() {
         try {
           const response = await axios.get('http://localhost:3001/categoria/' + categoriaId);
-          setCategoria(response.data);
+          setCategoria(response.data[0]);
+          console.log(response.data[0]);
         } catch (e) {
           console.log('Error: ', e.response.status);
           setCategoria({ id: 'Error', nombre: e.response.status })
@@ -26,19 +28,34 @@ export default function FormularioCategoria() {
     }, [categoriaId]);
   };
 
-  const handleChange = (event) => {
-    setCategoria({ nombre: event.target.value });
+  const handleInputChange = (event) => {
+    console.log(event.target.value);
+    setCategoria({
+      ...categoria,
+      [event.target.name]: event.target.value,
+    });
   };
 
-  const handleSubmit = () => {
-    axios
-      .post('http://localhost:3001/categoria', { nombre: categoria.nombre })
-      .then(console.log("Envie todo vamos"))
-      .catch(console.log("fallo todo"))
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(categoria);
 
+    async function connect() {
+      try {
+        const response = await axios.post('http://localhost:3001/categoria/', categoria);
+        console.log(response);
+        // TODO: mostrar success!
+      }
+      catch(e) {
+        console.log('Error: ', e.response.status);
+        // TODO: mostrar mensaje de error
+      }
+    }
+    connect();
 
-    alert('A name was submitted: ' + categoria.nombre);
-  }
+    //alert('A name was submitted: ' + event);
+    //vent.preventDefault();
+  };
 
   return (
     <div>
@@ -48,13 +65,13 @@ export default function FormularioCategoria() {
       </h2>
       Formulario Categoria
       <h3>
-        {(categoria.id) ? 'Editar' : 'Agregar'}
+        {(categoria.categoria_id) ? 'Editar' : 'Agregar'}
       </h3>
       <form onSubmit={handleSubmit}>
-        <input type="hidden" name="id" value={categoria.id} />
+        <input type="hidden" name="categoria_id" value={categoria.categoria_id} />
         <label>
           Nombre:
-          <input type="text" name="nombre" value={categoria.nombre} onChange={handleChange} />
+          <input type="text" name="nombre" value={categoria.nombre} onChange={handleInputChange} />
         </label>
         <input type="submit" value="Grabar" />
       </form>
