@@ -20,7 +20,7 @@ export default function FormularioLibro() {
   });
 
   const [personaId, setPersonaId] = useState({
-    persona_id: ""
+    persona_id: "",
   });
 
   const [categorias, setCategorias] = useState([]);
@@ -34,9 +34,8 @@ export default function FormularioLibro() {
             "http://localhost:3001/libro/" + libroId
           );
           await setLibro(response.data[0]);
-          console.log(libro);
           setPersonaId({
-            persona_id: libro.persona_id
+            persona_id: libro.persona_id,
           });
         } catch (e) {
           console.log("Error: ", e.response.status);
@@ -47,38 +46,33 @@ export default function FormularioLibro() {
     }, [libroId]);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     async function connect() {
       try {
-        const response = await axios.get('http://localhost:3001/categoria');
+        const response = await axios.get("http://localhost:3001/categoria");
         await setCategorias(response.data);
-        console.log(categorias);
-      }
-      catch(e) {
-        console.log('Error: ', e.response.status);
-        setCategorias([{id: 'Error', nombre: e.response.status}])
+      } catch (e) {
+        console.log("Error: ", e.response.status);
+        setCategorias([{ id: "Error", nombre: e.response.status }]);
       }
     }
     connect();
-  },[]);
+  }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function connect() {
       try {
-        const response = await axios.get('http://localhost:3001/persona');
+        const response = await axios.get("http://localhost:3001/persona");
         await setPersonas(response.data);
-        console.log(personas);
-      }
-      catch(e) {
-        console.log('Error: ', e.response.status);
-        setPersonas([{id: 'Error', nombre: e.response.status}])
+      } catch (e) {
+        console.log("Error: ", e.response.status);
+        setPersonas([{ id: "Error", nombre: e.response.status }]);
       }
     }
     connect();
-  },[]);
+  }, []);
 
   const handleInputChange = (event) => {
-    console.log(event.target.value);
     setLibro({
       ...libro,
       [event.target.name]: event.target.value,
@@ -87,39 +81,36 @@ export default function FormularioLibro() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("libro");
 
     async function connect() {
       if (libro.libro_id) {
         try {
-          const response = await axios.put('http://localhost:3001/libro/' + libro.libro_id, libro);
-          console.log(response);
+          const response = await axios.put(
+            "http://localhost:3001/libro/" + libro.libro_id,
+            libro
+          );
           // TODO: mostrar success!
-        }
-        catch(e) {
-          console.log('Error: ', e.response.status);
+        } catch (e) {
+          console.log("Error: ", e.response.status);
           // TODO: mostrar mensaje de error
         }
       } else {
         try {
-          const response = await axios.post('http://localhost:3001/libro/', libro);
-          console.log(response);
+          const response = await axios.post(
+            "http://localhost:3001/libro/",
+            libro
+          );
           // TODO: mostrar success!
-        }
-        catch(e) {
-          console.log('Error: ', e.response.status);
+        } catch (e) {
+          console.log("Error: ", e.response.status);
           // TODO: mostrar mensaje de error
         }
-      } 
+      }
     }
     connect();
-
-    //alert('A name was submitted: ' + event);
-    //vent.preventDefault();
   };
 
   const handleInputPrestar = (event) => {
-    console.log(event.target.value);
     setPersonaId({
       ...personaId,
       [event.target.name]: event.target.value,
@@ -128,26 +119,21 @@ export default function FormularioLibro() {
 
   const handlePrestar = (event) => {
     event.preventDefault();
-    console.log("prestar");
 
     async function connect() {
-        try {
-          const response = await axios.put('http://localhost:3001/libro/prestar/' + libro.libro_id, personaId);
-          console.log(response);
-          // TODO: mostrar success!
-        }
-        catch(e) {
-          console.log('Error: ', e.response.status);
-          // TODO: mostrar mensaje de error
-        }
+      try {
+        const response = await axios.put(
+          "http://localhost:3001/libro/prestar/" + libro.libro_id,
+          personaId
+        );
+        // TODO: mostrar success!
+      } catch (e) {
+        console.log("Error: ", e.response.status);
+        // TODO: mostrar mensaje de error
+      }
     }
     connect();
-
-    //alert('A name was submitted: ' + event);
-    //vent.preventDefault();
   };
-  
-
 
   return (
     <div>
@@ -180,29 +166,59 @@ export default function FormularioLibro() {
           />
         </label>
         <label>
-          Categoria:
-          <input
-            placeholder="Ingrese categoria"
-            type="text"
+          <select
             name="categoria_id"
-            value={libro.categoria_id}
+            id="categoria_id"
             onChange={handleInputChange}
-          />
+          >
+            {categorias.map((cat) => {
+              if (libro.categoria_id === cat.categoria_id) {
+                return (
+                  <option
+                    key={cat.categoria_id}
+                    value={cat.categoria_id}
+                    selected
+                  >
+                    {cat.nombre}
+                  </option>
+                );
+              } else {
+                return (
+                  <option key={cat.categoria_id} value={cat.categoria_id}>
+                    {cat.nombre}
+                  </option>
+                );
+              }
+            })}
+          </select>
         </label>
+
         <button type="submit">Guardar</button>
       </form>
-      
       <h2>Prestar</h2>
       <form onSubmit={handlePrestar}>
-      <label>
-          Prestado a:
-          <input
-            placeholder="Ingrese persona id"
-            type="text"
+        <label>
+          <select
             name="persona_id"
-            value={personaId.persona_id}
+            id="persona_id"
             onChange={handleInputPrestar}
-          />
+          >
+            {personas.map((per) => {
+              if (libro.persona_id === per.persona_id) {
+                return (
+                  <option key={per.persona_id} value={per.persona_id} selected>
+                    {per.nombre} {per.apellido}
+                  </option>
+                );
+              } else {
+                return (
+                  <option key={per.persona_id} value={per.persona_id}>
+                    {per.nombre} {per.apellido}
+                  </option>
+                );
+              }
+            })}
+          </select>
         </label>
         <button type="submit">Prestar</button>
       </form>

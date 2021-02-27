@@ -1,21 +1,20 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 export default function LineaCategoria({ categoria }) {
-  const eliminar = () => {  
+  const eliminar = () => {
     // TODO: agregar mensaje de confirmacion
     async function connect() {
       try {
-        const response = await axios.delete('http://localhost:3001/categoria/' + categoria.categoria_id);
-        console.log(response);
+        const response = await axios.delete(
+          "http://localhost:3001/categoria/" + categoria.categoria_id
+        );
         // TODO: mostrar success!
         //actualis lista categoria
-
-      }
-      catch(e) {
-        console.log('Error: ', e.response.status);
+      } catch (e) {
+        console.log("Error: ", e.response.status);
         // TODO: mostrar mensaje de error
       }
     }
@@ -27,7 +26,7 @@ export default function LineaCategoria({ categoria }) {
       <td>{categoria.categoria_id}</td>
       <td>{categoria.nombre}</td>
       <td>
-        <a href={'/categorias/' + categoria.categoria_id}>
+        <a href={"/categorias/" + categoria.categoria_id}>
           <FontAwesomeIcon icon={faEye} />
         </a>
       </td>
@@ -37,5 +36,5 @@ export default function LineaCategoria({ categoria }) {
         </button>
       </td>
     </tr>
-  )
+  );
 }

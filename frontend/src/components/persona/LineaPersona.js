@@ -1,19 +1,23 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faPencilAlt,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function LineaPersona({ persona }) {
-  const eliminar = () => {  
+  const eliminar = () => {
     // TODO: agregar mensaje de confirmacion
     async function connect() {
       try {
-        const response = await axios.delete('http://localhost:3001/persona/' + persona.persona_id);
-        console.log(response);
+        const response = await axios.delete(
+          "http://localhost:3001/persona/" + persona.persona_id
+        );
         // TODO: mostrar success!
-      }
-      catch(e) {
-        console.log('Error: ', e.response.status);
+      } catch (e) {
+        console.log("Error: ", e.response.status);
         // TODO: mostrar mensaje de error
       }
     }
@@ -28,12 +32,12 @@ export default function LineaPersona({ persona }) {
       <td>{persona.alias}</td>
       <td>{persona.email}</td>
       <td>
-        <a href={'/personas/' + persona.persona_id}>
+        <a href={"/personas/" + persona.persona_id}>
           <FontAwesomeIcon icon={faEye} />
         </a>
       </td>
       <td>
-        <a href={'/personas/editar/' + persona.persona_id}>
+        <a href={"/personas/editar/" + persona.persona_id}>
           <FontAwesomeIcon icon={faPencilAlt} />
         </a>
       </td>
@@ -43,5 +47,5 @@ export default function LineaPersona({ persona }) {
         </button>
       </td>
     </tr>
-  )
+  );
 }

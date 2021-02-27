@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faBook } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faBook } from "@fortawesome/free-solid-svg-icons";
 
-import LineaLibro from './LineaLibro'
+import LineaLibro from "./LineaLibro";
 
 export default function ListadoLibros({ categoria, persona }) {
   const [libros, setLibros] = useState([]);
@@ -12,65 +12,79 @@ export default function ListadoLibros({ categoria, persona }) {
   const [categorias, setCategorias] = useState([]);
   const [personas, setPersonas] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function connect() {
       try {
-        const response = await axios.get('http://localhost:3001/libro');
+        const response = await axios.get("http://localhost:3001/libro");
         if (categoria) {
           // Libros filtrados por categoria
-          setLibros(response.data.filter(libro => libro.categoria_id.toString() === categoria));
+          setLibros(
+            response.data.filter(
+              (libro) => libro.categoria_id.toString() === categoria
+            )
+          );
         } else if (persona) {
           // Libros filtrados por persona
-          setLibros(response.data.filter(libro => (libro.persona_id && libro.persona_id.toString() === persona)));
+          setLibros(
+            response.data.filter(
+              (libro) =>
+                libro.persona_id && libro.persona_id.toString() === persona
+            )
+          );
         } else {
           // Todos los libros sin filtrar
           setLibros(response.data);
-          console.log(response.data);
         }
-      } catch(e) {
-        console.log('Error: ', e.response.data.Mensaje);
-        setLibros([{id: 'Error', nombre: e.response.data.Mensaje}])
+      } catch (e) {
+        console.log("Error: ", e.response.data.Mensaje);
+        setLibros([{ id: "Error", nombre: e.response.data.Mensaje }]);
       }
     }
     connect();
-  },[categoria, persona]);
+  }, [categoria, persona]);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function connect() {
       try {
-        const response = await axios.get('http://localhost:3001/categoria');
+        const response = await axios.get("http://localhost:3001/categoria");
         setCategorias(response.data);
-      }
-      catch(e) {
-        console.log('Error: ', e.response.status);
-        setCategorias([{id: 'Error', nombre: e.response.status}])
+      } catch (e) {
+        console.log("Error: ", e.response.status);
+        setCategorias([{ id: "Error", nombre: e.response.status }]);
       }
     }
     connect();
-  },[]);
+  }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function connect() {
       try {
-        const response = await axios.get('http://localhost:3001/persona');
+        const response = await axios.get("http://localhost:3001/persona");
         setPersonas(response.data);
-      }
-      catch(e) {
-        console.log('Error: ', e.response.status);
-        setPersonas([{id: 'Error', nombre: e.response.status}])
+      } catch (e) {
+        console.log("Error: ", e.response.status);
+        setPersonas([{ id: "Error", nombre: e.response.status }]);
       }
     }
     connect();
-  },[]);
+  }, []);
 
-  useEffect(()=>{
-    const tbody = libros.map(libro =>(
-      <LineaLibro libro={libro} key={libro.libro_id} 
-                  categoria={categorias.find(categoria => categoria.categoria_id === libro.categoria_id)} 
-                  persona={personas.find(persona => (libro.persona_id && persona.persona_id === libro.persona_id))} />
+  useEffect(() => {
+    const tbody = libros.map((libro) => (
+      <LineaLibro
+        libro={libro}
+        key={libro.libro_id}
+        categoria={categorias.find(
+          (categoria) => categoria.categoria_id === libro.categoria_id
+        )}
+        persona={personas.find(
+          (persona) =>
+            libro.persona_id && persona.persona_id === libro.persona_id
+        )}
+      />
     ));
     setLibrosHtml(tbody);
-  },[libros, categorias, personas]);
+  }, [libros, categorias, personas]);
 
   return (
     <div>
@@ -78,10 +92,10 @@ export default function ListadoLibros({ categoria, persona }) {
         <FontAwesomeIcon icon={faBook} />
         Libros
       </h2>
-      <a href='/libros/agregar'>
+      <a href="/libros/agregar">
         <FontAwesomeIcon icon={faPlus} /> Agregar
       </a>
-      <table border='1'>
+      <table border="1">
         <thead>
           <tr>
             <th>Id</th>
@@ -91,10 +105,8 @@ export default function ListadoLibros({ categoria, persona }) {
             <th>Prestado</th>
           </tr>
         </thead>
-        <tbody>
-          {librosHtml}
-        </tbody>
+        <tbody>{librosHtml}</tbody>
       </table>
     </div>
-  )
+  );
 }
