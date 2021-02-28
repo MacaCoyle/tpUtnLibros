@@ -1,5 +1,41 @@
+body{
+  font-family: "Fort-Book","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  line-height: 1.42857143;
+  color: #333;
+}
+
+ul {
+    list-style-type: none;
+    color: black;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 15px;
+}
+
+ a:link {
+  text-decoration: none;
+  font-size: 20px;
+  line-height: 1.42857143;
+  color: black;
+}
+
+.App > div:nth-child(2) > div:nth-child(2){
+  padding-left: 185px;
+  padding-top: 10px;
+}
+
+
+.App > div:nth-child(2) > div:nth-child(2) > table:nth-child(3){
+  margin-top: 27px;
+}
+
+.App > div:nth-child(2) > div:nth-child(2) > form:nth-child(3){
+  display: inline-block;
+}
+
 .App {
-  text-align: center;
+  text-align: left;
 }
 
 .App-logo {
@@ -7,10 +43,27 @@
   pointer-events: none;
 }
 
+.App > div:nth-child(2) > div:nth-child(2) > form:nth-child(3) > label:nth-child(5){
+  padding: 22px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.App > div:nth-child(2) > div:nth-child(2) > table:nth-child(3){
+  border-collapse: collapse;
+}
+
+.App > div:nth-child(2) > div:nth-child(2) > table:nth-child(3) > thead:nth-child(1) > tr:nth-child(1){
+  display: table-row;
+}
+
+
+table, th, td {
+  padding: 7px;
 }
 
 .App-header {
